@@ -1,15 +1,35 @@
 #include "Definitions.h"
 
-#define random64BitNumber ((U64)rand() + (U64)rand() << 15 + (U64)rand() << 30 + (U64)rand() << 45 + ((U64)rand() & 0xf) << 60) // A random 64 bit number
+#define random64BitNumber ((U64)rand() | (U64)rand() << 15 | (U64)rand() << 30 | (U64)rand() << 45 | ((U64)rand() & 0xf) << 60) // A random 64 bit number
 
 int array120ToArray64[boardSquareNumber]; // To convert the 12x10 index to a 8x8 index
 int array64ToArray120[64]; // To convert the 8x8 index to a 12x10 index
+int indexToFiles[boardSquareNumber]; //Converts the index to a file letter
+int indexToRanks[boardSquareNumber]; //Converts the index to a rank number
 
 U64 setBitBoardMask[64]; // The set bitboard mask array
-U64 clearBitBoardMask[64]; // The clear bitboard mask array
+U64 clearBitBoardMask[64]; // The clear bitboard mask array  
 U64 pieceHashKeys[13][boardSquareNumber]; //Hashes (stores) the pieces and their positions
 U64 sideHashKey; // Hashes which side is it to move
 U64 castleHashKey[16]; // Hashes the current castling permissions
+
+void indexToFileAndRank(){ //Converts the 120 array index to a file and rank coordinate
+    int file = aFile; //The first file on the board
+    int rank = firstRank; //The first rank on the board
+
+    for(int index = 0; index < boardSquareNumber; ++index){ //Sets everything to an offboard square
+        indexToFiles[index] = offBoardSquare; //Sets all files to an offboard square
+        indexToRanks[index] = offBoardSquare; //Sets all ranks to an offboard square
+    }
+
+    for (int rank = firstRank; rank <= eighthRank; ++rank){ // Loops through every rank on the board
+        for (int file = aFile; file <= hFile; ++file){ // Loops through every file on the board
+            int square120array = coordinatesTo120ArrayIndex(file, rank);
+            indexToFiles[square120array] = file; //Sets the file on that index
+            indexToRanks[square120array] = rank; //Sets the rank on that index
+        }
+    }
+}
 
 void initializeHashKeys(){
     for(int index = 0; index < 13; ++index){ //Loops for the first index of the piece hash key
@@ -62,4 +82,5 @@ void initializeAll(){
     initializeArray120ToArray64();
     initializeBitBoardMask();
     initializeHashKeys();
+    indexToFileAndRank();
 }

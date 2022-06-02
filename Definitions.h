@@ -6,11 +6,11 @@ using namespace std;
 
 #define NAME "Jentera IkanSero v1.0" //This just replaces every NAME with "Jentera IkanSero v1.0" in the code
 #define boardSquareNumber 120 //We are using a 12x10 board representation
-#define maxGameMoves //The maximum number of moves in a game, to save memory
+#define maxGameMoves 2048//The maximum number of moves in a game, to save memory
 #define coordinatesTo120ArrayIndex(files, ranks) ((21 + files) + (10 * ranks)) //Converts the coordinates of a square to the index of the 120 array
 #define clearBitBoard(bitBoard, index) ((bitBoard) &= clearBitBoardMask[index]) //Clears the bitboard
 #define setBitBoard(bitBoard, index) ((bitBoard) |= setBitBoardMask[index]) //Sets the bitboard
-#define ASSERT(n) if(!(n)){cout << #n << " - Failed in file " << __FILE__ << " at line " << __LINE__; exit(1);} // Error detection
+#define ASSERT(n) if(!(n)){cout << #n << " - Failed in file " << __FILE__ << " at line " << dec << __LINE__; exit(1);} // Error detection
 
 typedef unsigned long long U64; //U64 is a 64-bit number, one bit for each square of the board
 
@@ -49,13 +49,14 @@ struct Board{
     int ply; //Stores how many half-moves are searched
     int hisPly; //Stores ply history
     int pieceNumber[13]; //Stores the number of the 13 types (including the empty square) of pieces are on the board
-    int bigPieceNumber[3]; //Stores how many big pieces (not pawns) are on each side
-    int majorPiecesNumber[3]; //Stores how many major pieces (rooks and queens) are on each side, used to evaluate endgames
-    int minorPiecesNumber[3]; //Stores how many minor pieces (bishops and knights) are on each side, used to evaluate endgames
+    int bigPiecesNumber[2]; //Stores how many big pieces (not pawns) are on each side
+    int majorPiecesNumber[2]; //Stores how many major pieces (rooks and queens) are on each side, used to evaluate endgames
+    int minorPiecesNumber[2]; //Stores how many minor pieces (bishops and knights) are on each side, used to evaluate endgames
     int castlePermission; // Stores the castling permission
-    int pieceList[13][10]; // list of each piece type on the board
+    int pieceList[13][10]; //List of each piece type on the board
+    int materialScore[2]; //The material score for each side
 
-    U64 pawns[3]; //Bitboard representation for pawns
+    U64 pawnBitBoards[3]; //Bitboard representation for pawns
     U64 positionKey; //Stores the positions
 
     UndoMove history[maxGameMoves]; //Stores the UndoMove class info
@@ -64,11 +65,22 @@ struct Board{
 extern void initializeAll(); //Function to initialize everything
 extern void printBitBoard(U64 bitBoard); //Function to print bitboard
 extern void resetBoard(Board *position); //A function to reset basically everything the board
+extern void printBoard(const Board *position); //To print the board on the console
+extern void parseFENString(const char *FENString, Board *position); //To set up the board using a FEN string
+extern void updateMaterialList(Board *position); //counts the number of pieces and their classifications
 
 extern int array120ToArray64[boardSquareNumber]; //To convert the 12x10 index to a 8x8 index (BAD PRACTICE TO DEFINE GLOBAL VARIABLES!!)
 extern int array64ToArray120[64]; //To convert the 8x8 index to a 12x10 index
 extern int popBit(U64 *bitBoardAddress); //This basically pops out (removes) 1 bit from the board (Don't ask how)
 extern int countBit(U64 bitBoard); //Takes a bitboard and counts the number of bits inside it
+extern int bigPieces[13]; //Specifies all non-pawn pieces
+extern int majorPieces[13]; //Specifies the rook and the queen
+extern int minorPieces[13]; //Specifies the bishop and the knight
+extern int pieceColour[13]; //Specifies the piece color
+extern int pieceValue[13]; //Specifies the value of each piece
+extern int indexToFiles[boardSquareNumber]; //Converts the index to a file letter
+extern int indexToRanks[boardSquareNumber]; //Converts the index to a rank number
+extern int checkBoard(const Board *position);  //A function to crosscheck wether the information on the board is correct
 
 extern U64 setBitBoardMask[64]; // The set bitboard mask array
 extern U64 clearBitBoardMask[64]; // The clear bitboard mask array
@@ -76,3 +88,8 @@ extern U64 pieceHashKeys[13][boardSquareNumber]; //Hashes (stores) the pieces an
 extern U64 sideHashKey; // Hashes which side is it to move
 extern U64 castleHashKey[16]; // Hashes the current castling permissions
 extern U64 generatePositionKeys(const Board *position); //Generates a unique key for each position
+
+extern char pieceCharacter[]; //the piece symbols
+extern char sideCharacter[]; //the side symbols
+extern char rankCharacter[]; //the rank symbols
+extern char fileCharacter[]; //the file symbols
