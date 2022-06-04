@@ -1,16 +1,27 @@
 #pragma once
-#include <stdlib.h> // The C standard library for some useful functions
+#include <cstdlib> // The C standard library for some useful functions
 #include <iostream>
+#include <bitset>
 
 using namespace std;
 
 #define NAME "Jentera IkanSero v1.0" //This just replaces every NAME with "Jentera IkanSero v1.0" in the code
 #define boardSquareNumber 120 //We are using a 12x10 board representation
-#define maxGameMoves 2048//The maximum number of moves in a game, to save memory
+#define maxGameMoves 2048 //The maximum number of moves in a game, to save memory
+#define maxPositionMoves 256 //The maximum number of moves in a given position
 #define coordinatesTo120ArrayIndex(files, ranks) ((21 + files) + (10 * ranks)) //Converts the coordinates of a square to the index of the 120 array
 #define clearBitBoard(bitBoard, index) ((bitBoard) &= clearBitBoardMask[index]) //Clears the bitboard
 #define setBitBoard(bitBoard, index) ((bitBoard) |= setBitBoardMask[index]) //Sets the bitboard
-#define ASSERT(n) if(!(n)){cout << #n << " - Failed in file " << __FILE__ << " at line " << dec << __LINE__; exit(1);} // Error detection
+#define ASSERT(error) if(!(error)){cout << #error << " - Failed in file " << __FILE__ << " at line " << __LINE__; exit(1);} // Error detection
+#define originalSquare(square) (square & 0x7F) //Used to make a move, the origin square is represented by the first 7 bits of a 28 bit number   (0000 0000 0000 0000 0000 0111 1111)
+#define destinationSquare(square) ((square >> 7) & 0x7F) //The destination square is represented by the next 7 bits of a 28 bit number          (0000 0000 0000 0011 1111 1000 0000)
+#define pieceCaptured(piece) ((piece >> 14) & 0xF)  //The piece captured is represented by the next 4 bits of a 28 bit number                   (0000 0000 0011 1100 0000 0000 0000)
+#define enPassantMove 0x40000 //The en passant move is represented by the next bit of a 28 bit number                                           (0000 0000 0100 0000 0000 0000 0000)
+#define doublePawnMove 0x80000 //The double pawn move is represented by the next bit of a 28 bit number                                         (0000 0000 1000 0000 0000 0000 0000)
+#define piecePromotedTo(piece) ((piece >> 20) & 0xF)  //The piece promoted to is represented by the next 4 bits of a 28 bit number              (0000 1111 0000 0000 0000 0000 0000)
+#define castlingMove 0x1000000 //The castling move is represented by the next bit of a 28 bit number                                            (0001 0000 0000 0000 0000 0000 0000) 
+#define isCapture  0x7C000 //Checks if a move is a capture
+#define isPromotion  0xF00000 //Checks if a move is a promotion
 
 typedef unsigned long long U64; //U64 is a 64-bit number, one bit for each square of the board
 
@@ -30,6 +41,16 @@ enum{
 enum{
     whiteKingsideCastling=1, whiteQueensideCastling=2,  //Each castling configuration on the board is assigned a number binarily
     blackKingsideCastling=4, blackQueensideCastling=8}; //e.g. 0101 = white and black can castle queenside, 1100 = white can castle both side, black cant castle either side, etc.
+
+struct Move{
+    int move;
+    int postitionScore;
+};
+
+struct MoveList{ //All the possible moves given a position
+    Move moves[maxPositionMoves]; //The possible move list in a given position
+    int count; //To count how many moves in a position
+};
 
 struct UndoMove{
     int move; //Stores the number of moves that has been played
@@ -81,6 +102,10 @@ extern int pieceValue[13]; //Specifies the value of each piece
 extern int indexToFiles[boardSquareNumber]; //Converts the index to a file letter
 extern int indexToRanks[boardSquareNumber]; //Converts the index to a rank number
 extern int checkBoard(const Board *position);  //A function to crosscheck wether the information on the board is correct
+extern int isItAKnight[13]; //A silly way to check if a piece is a knight
+extern int isItAKing[13]; //A silly way to check if a piece is a king
+extern int isItABishopOrQueen[13]; //A silly way to check if a piece is a bishop or queen
+extern int isItARookOrQueen[13]; //A silly way to check if a piece is a rook or queen
 
 extern U64 setBitBoardMask[64]; // The set bitboard mask array
 extern U64 clearBitBoardMask[64]; // The clear bitboard mask array
@@ -93,3 +118,12 @@ extern char pieceCharacter[]; //the piece symbols
 extern char sideCharacter[]; //the side symbols
 extern char rankCharacter[]; //the rank symbols
 extern char fileCharacter[]; //the file symbols
+extern char *printAlgebraicSquareNotation(const int square); //Converts the square index to an algebraic notation
+extern char *printMove(const int move); //Prints the move notation
+
+extern bool squareUnderAttack(const int square, const int attackingSide, const Board *position); //Determines if a square is under attack
+extern bool isSquareOnTheBoard(const int square); //checks if the square is on the board
+extern bool isASidePlaying(const int side); //checks a side is playing
+extern bool isFileOrRankValid(const int fileOrRank); //checks if the square is valid
+extern bool isPieceValidOrEmpty(const int piece); //checks if the piece is valid or empty
+extern bool isPieceValid(const int piece); //checks if the piece is valid

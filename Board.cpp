@@ -60,7 +60,7 @@ int checkBoard(const Board *position){ //A function to crosscheck wether the inf
 
     ASSERT(checkMaterialScore[white] == position->materialScore[white] && checkMaterialScore[black] == position->materialScore[black]); //Check if the material score is the same
     ASSERT(checkBigPiecesnumber[white] == position->bigPiecesNumber[white] && checkBigPiecesnumber[black] == position->bigPiecesNumber[black]); //Check if the big piece number is the same
-    ASSERT(checkMinorPiecesnumber[white] == position->minorPiecesNumber[white] && checkMinorPiecesnumber[black] == position->majorPiecesNumber[black]); //More checks for minor pieces
+    ASSERT(checkMinorPiecesnumber[white] == position->minorPiecesNumber[white] && checkMinorPiecesnumber[black] == position->minorPiecesNumber[black]); //More checks for minor pieces
     ASSERT(checkMajorPiecesnumber[white] == position->majorPiecesNumber[white] && checkMajorPiecesnumber[black] == position->majorPiecesNumber[black]); //More checks for major pieces
     ASSERT(white == position->side || black == position->side); //Check if a side is actually playing
     ASSERT(generatePositionKeys(position) == position->positionKey); //Checks if the position key is the same
@@ -253,5 +253,5 @@ void printBoard(const Board *position){ //To print the board on the console
     cout << char(position->castlePermission & whiteQueensideCastling ? 'Q':'-'); //prints if white can castle queenside
     cout << char(position->castlePermission & blackKingsideCastling ? 'k':'-'); //prints if black can castle kingside
     cout << char(position->castlePermission & blackQueensideCastling ? 'q':'-') << endl; //prints if black can castle queenkingside
-    cout << "Position key: " << hex << uppercase << position->positionKey << endl << endl; //Prints the current position key
+    cout << "Position key: " << hex << uppercase << position->positionKey << dec << endl << endl; //Prints the current position key
 }
