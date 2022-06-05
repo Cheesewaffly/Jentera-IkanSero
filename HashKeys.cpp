@@ -14,9 +14,9 @@ U64 generatePositionKeys(const Board *position){ //Generates a unique key for ea
 
     if(position->side == white){finalKey ^= sideHashKey;} //Checks which side is to play
 
-    if(position->enPassant != emptySquare){ //Checks if the en passant square is empty or not
-        ASSERT(position->enPassant >= 0 && position->enPassant < boardSquareNumber); //Makes sure that the square is actually on the board
-        finalKey ^= pieceHashKeys[emptyPiece][position->enPassant]; //Hashes the en passant square to the final position key
+    if(position->enPassantSquare != emptySquare){ //Checks if the en passant square is empty or not
+        ASSERT(position->enPassantSquare >= 0 && position->enPassantSquare < boardSquareNumber); //Makes sure that the square is actually on the board
+        finalKey ^= pieceHashKeys[emptyPiece][position->enPassantSquare]; //Hashes the en passant square to the final position key
     }
 
     ASSERT(position->castlePermission >= 0 && position->castlePermission <= 15); //Makes sure that the castling permissions is in the defined range

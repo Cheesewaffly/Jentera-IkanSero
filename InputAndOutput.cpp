@@ -45,5 +45,5 @@ void printMoveList(const MoveList *moveList){ //Prints out the move list
 
         cout << "Move: " << index + 1 << ". " << printMove(move) << ", (score: " << score << ")" << endl;
     }
-    cout << "Move list total " << moveList->count << " moves: " << endl;
+    cout << "Move list total " << moveList->count << " moves" << endl;
 }

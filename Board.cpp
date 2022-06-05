@@ -64,7 +64,7 @@ int checkBoard(const Board *position){ //A function to crosscheck wether the inf
     ASSERT(checkMajorPiecesnumber[white] == position->majorPiecesNumber[white] && checkMajorPiecesnumber[black] == position->majorPiecesNumber[black]); //More checks for major pieces
     ASSERT(white == position->side || black == position->side); //Check if a side is actually playing
     ASSERT(generatePositionKeys(position) == position->positionKey); //Checks if the position key is the same
-    ASSERT(position->enPassant == emptySquare || (indexToRanks[position->enPassant] == sixthRank && position->side == black) || (indexToRanks[position->enPassant] == thirdRank && position->side == black)) //checks the en passant square
+    ASSERT(position->enPassantSquare == emptySquare || (indexToRanks[position->enPassantSquare] == sixthRank && position->side == white) || (indexToRanks[position->enPassantSquare] == thirdRank && position->side == black)) //The en passant square
     ASSERT(position->boardPieces[position->kingSquare[white]] == whiteKing) //Checks if the white king is in place
     ASSERT(position->boardPieces[position->kingSquare[black]] == blackKing) //Checks if the black king is in place
 
@@ -193,7 +193,7 @@ void parseFENString(const char *FENString, Board *position){ //To set up the boa
         ASSERT(file >= aFile && file <=hFile); //Makes sure the file is in the range defined
         ASSERT(rank >= firstRank && rank<=eighthRank); //Makes sure the rank is in the range defined
 
-        position->enPassant = coordinatesTo120ArrayIndex(file, rank); //assigns the en passant square to a 120 array index
+        position->enPassantSquare = coordinatesTo120ArrayIndex(file, rank); //assigns the en passant square to a 120 array index
     }
 
     position->positionKey = generatePositionKeys(position); //This generates the position key
@@ -213,7 +213,8 @@ void resetBoard(Board *position){ //A function to reset basically everything the
         position->bigPiecesNumber[index] = 0; //Resets the number of big pieces on the board
         position->minorPiecesNumber[index] = 0; //Resets the number of minor pieces on the board
         position->majorPiecesNumber[index] = 0; //Resets the number of major pieces on the board
-        position->pawnBitBoards[index] = 0ULL; //Resets the number of pawns on the board
+        position->materialScore[index] = 0; //Resets the material score on the board
+        position->pawnBitBoards[index] = 0ULL; //Resets the number of pawns on the board;
     }
 
     for(int index = 0; index < 13; ++index){ //Loops through all the squares on the board for the number of the types of pieces
@@ -222,7 +223,7 @@ void resetBoard(Board *position){ //A function to reset basically everything the
 
     position->kingSquare[white] = position->kingSquare[black] = emptySquare; //Sets the king squares to empty squares
     position->side = both; //Sets the side to play to both (neither white nor black)
-    position->enPassant = emptySquare; //Sets ne en passant square to an empty square
+    position->enPassantSquare = emptySquare; //Sets ne en passant square to an empty square
     position->fiftyMoveRule = 0; //Resets the fifty move counter
     position->castlePermission = 0; //Resets castling permissions
     position->ply = 0; //Resets the half-move count
@@ -248,7 +249,7 @@ void printBoard(const Board *position){ //To print the board on the console
     }
     cout << endl;
     cout << "Side to play: " << char(sideCharacter[position->side]) << endl; //Prints which side is it to play
-    cout << "En passant square: " << dec << position->enPassant << endl; //Prints the en passant square as a 120 square index
+    cout << "En passant square: " << dec << position->enPassantSquare << endl; //Prints the en passant square as a 120 square index
     cout << char(position->castlePermission & whiteKingsideCastling ? 'K':'-'); //prints if white can castle kingside
     cout << char(position->castlePermission & whiteQueensideCastling ? 'Q':'-'); //prints if white can castle queenside
     cout << char(position->castlePermission & blackKingsideCastling ? 'k':'-'); //prints if black can castle kingside

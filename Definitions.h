@@ -65,7 +65,7 @@ struct Board{
     int boardPieces[boardSquareNumber]; //An array of 120 to represent the board
     int kingSquare[2]; //Stores where the king's squares
     int side; //Stores who's turn is it to move
-    int enPassant; //Stores en passant squares
+    int enPassantSquare; //Stores en passant squares
     int fiftyMoveRule; //Stores the fifty move counter
     int ply; //Stores how many half-moves are searched
     int hisPly; //Stores ply history
@@ -89,6 +89,8 @@ extern void resetBoard(Board *position); //A function to reset basically everyth
 extern void printBoard(const Board *position); //To print the board on the console
 extern void parseFENString(const char *FENString, Board *position); //To set up the board using a FEN string
 extern void updateMaterialList(Board *position); //counts the number of pieces and their classifications
+extern void generateAllMoves(const Board *position,  MoveList *moveList); // Generates all possible moves
+extern void printMoveList(const MoveList *moveList); //Prints out the move list
 
 extern int array120ToArray64[boardSquareNumber]; //To convert the 12x10 index to a 8x8 index (BAD PRACTICE TO DEFINE GLOBAL VARIABLES!!)
 extern int array64ToArray120[64]; //To convert the 8x8 index to a 12x10 index
@@ -106,6 +108,7 @@ extern int isItAKnight[13]; //A silly way to check if a piece is a knight
 extern int isItAKing[13]; //A silly way to check if a piece is a king
 extern int isItABishopOrQueen[13]; //A silly way to check if a piece is a bishop or queen
 extern int isItARookOrQueen[13]; //A silly way to check if a piece is a rook or queen
+extern int isItASlidingPiece[13]; //To check if a piece slide
 
 extern U64 setBitBoardMask[64]; // The set bitboard mask array
 extern U64 clearBitBoardMask[64]; // The clear bitboard mask array

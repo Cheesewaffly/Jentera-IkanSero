@@ -1,18 +1,15 @@
 #include "Definitions.h"
 
-int main()
-{
+int main(){
     initializeAll();
-    int origin = A2;
-    int destination = H7;
-    int capture = whiteRook;
-    int promotion = blackKing;
 
-    int move = origin | (destination << 7) | (capture << 14) | (promotion << 20);
-    cout << "Hexadecimal: " << hex << uppercase << move << dec << endl;
-    cout << "Decimal: " << move << endl;
-    cout << "Binary: " << bitset<28>(move) << endl;
-    cout << "Original Square: " << printAlgebraicSquareNotation(origin) << endl;
-    cout << "Destination Square: " << printAlgebraicSquareNotation(destination) << endl;
-    cout << "Notation: " << printMove(move) << endl;
+    Board board[1];
+    //parseFENString("rnbqkb1r/pp1p1pPp/8/2p1pP2/1P1P4/3P3P/P1P1P3/RNBQKBNR w KQkq e6 0 1", board);
+    parseFENString("rnbqkbnr/p1p1p3/3p3p/1p1p4/2P1Pp2/8/PP1P1PpP/RNBQKB1R b - e3 0 1", board);
+    printBoard(board);
+    MoveList moveList[1];
+    generateAllMoves(board, moveList);
+    printMoveList(moveList);
+
+    system("pause");
 }

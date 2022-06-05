@@ -24,7 +24,7 @@ bool squareUnderAttack(const int square, const int attackingSide, const Board *p
 
     for(int index = 0; index < 8; ++index){ //Determines if a square is attacked by a knight
         piece = position->boardPieces[square + knightMoveDirection[index]]; //Gets the piece where a knight should be
-        if(isItAKnight[piece] && pieceColour[piece] == attackingSide){ //If that piece is a knight of the same colour as the attacking side
+        if(piece != offBoardSquare && isItAKnight[piece] && pieceColour[piece] == attackingSide){ //If that piece is a knight of the same colour as the attacking side
             return true;
         }
     }
@@ -63,7 +63,7 @@ bool squareUnderAttack(const int square, const int attackingSide, const Board *p
 
     for(int index = 0; index < 8; ++index){ //Determines if a square is attacked by a king
         piece = position->boardPieces[square + kingMoveDirection[index]]; //Gets the piece where a king should be
-        if(isItAKing[piece] && pieceColour[piece] == attackingSide){ //If that piece is a king of the same colour as the attacking side
+        if(piece != offBoardSquare && isItAKing[piece] && pieceColour[piece] == attackingSide){ //If that piece is a king of the same colour as the attacking side
             return true;
         }
     }
