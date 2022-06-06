@@ -58,7 +58,7 @@ void initializeBitBoardMask(){ //Initializes the mask for the bitboards
 }
 
 void initializeArray120ToArray64(){ // Converts the index of the 120 array to the 64 array
-    int square64Index; // Index of the 64 array to be replaced on the 120 array
+    int square64Index = 0; // Index of the 64 array to be replaced on the 120 array
 
     for (int index = 0; index < boardSquareNumber; ++index){ // Changes all of the items in the 120 array to an impossible number in the 64 array (64, since it goes from 0-63)
         array120ToArray64[index] = 64; //This is an impossible umber in the 64 array index
