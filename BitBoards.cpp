@@ -7,9 +7,7 @@ int popBit(U64 *bitBoardAddress){ //This basically pops out (removes) 1 bit from
 }
 
 int countBit(U64 bitBoard){ //Takes a bitboard and counts the number of bits inside it
-    int bitCounter; //A variable to count the bits
-    for(bitCounter = 0; bitBoard; bitCounter++, bitBoard &= bitBoard - 1); //Loops through the bitboard then counts how many loops it has done until it is empty 
-    return bitCounter; //How many loops it has done
+    return __builtin_popcountll(bitBoard); //Returns the number of set bits
 }
 
 void printBitBoard(U64 bitBoard){ //This is just to visualize the bitboards
