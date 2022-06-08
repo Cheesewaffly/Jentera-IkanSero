@@ -140,6 +140,24 @@ void generateAllMoves(const Board *position,  MoveList *moveList){ // Generates 
                 addCaptureMove(position, move(square, square + 11, emptyPiece, emptyPiece, enPassantMove), moveList); //Adds that move to the movelist
             }
         }
+
+        if(position->castlePermission & whiteKingsideCastling){ //Checks if kingside castling is still possible
+            if(position->boardPieces[F1] == emptyPiece && position->boardPieces[G1] == emptyPiece){ //Checks if G1 and F1 is empty for kingside castling
+                if(!squareUnderAttack(E1, black, position) && !squareUnderAttack(F1, black, position)){ //Checks if E1 and F1 is under attack
+                    addNonCaptureMove(position, move(E1, G1, emptyPiece, emptyPiece, castlingMove), moveList); //Adds the move to the move list
+                }
+            }
+
+        }
+
+        if(position->castlePermission & whiteQueensideCastling){ //Checks if queenside castling is still possible
+            if(position->boardPieces[D1] == emptyPiece && position->boardPieces[C1] == emptyPiece && position->boardPieces[B1] == emptyPiece){ //Checks if D1, C1 and B1 is empty for castling
+                if(!squareUnderAttack(E1, black, position) && !squareUnderAttack(D1, black, position)){ //Checks if E1 and D1 is under attack
+                    addNonCaptureMove(position, move(E1, C1, emptyPiece, emptyPiece, castlingMove), moveList); //Adds the move to the move list
+                }
+            }
+
+        }
     } else { //if the side playing is black
         for(int index = 0; index < position->pieceNumber[blackPawn]; index++){ //Loops through every black pawn on the board
             square = position->pieceList[blackPawn][index]; //Takes the position of that black pawn
@@ -168,6 +186,24 @@ void generateAllMoves(const Board *position,  MoveList *moveList){ // Generates 
                 addCaptureMove(position, move(square, square - 11, emptyPiece, emptyPiece, enPassantMove), moveList); //Adds that move to the movelist
             }
         }
+
+        if(position->castlePermission & blackKingsideCastling){ //Checks if kingside castling is still possible
+            if(position->boardPieces[F8] == emptyPiece && position->boardPieces[G8] == emptyPiece){ //Checks if G8 and F8 is empty for kingside castling
+                if(!squareUnderAttack(E8, white, position) && !squareUnderAttack(F8, white, position)){ //checks if E8 and F8 is under attack
+                    addNonCaptureMove(position, move(E8, G8, emptyPiece, emptyPiece, castlingMove), moveList); //Adds the move to the move list
+                }
+            }
+
+        }
+
+        if(position->castlePermission & blackQueensideCastling){ //Checks if queenside castling is still possible
+            if(position->boardPieces[D8] == emptyPiece && position->boardPieces[C8] == emptyPiece && position->boardPieces[B8] == emptyPiece){ //Checks if D8, C8 and B8 is empty for castling
+                if(!squareUnderAttack(E8, white, position) && !squareUnderAttack(D8, white, position)){ //checks if E8 and D8 is under attack
+                    addNonCaptureMove(position, move(E8, C8, emptyPiece, emptyPiece, castlingMove), moveList); //Adds the move to the move list
+                }
+            }
+
+        }
     }
 
     pieceIndex = slidingPiecesLoopIndex[side]; //Tells the sliding pieces array when to start the loop (depensing on the color)
@@ -175,6 +211,26 @@ void generateAllMoves(const Board *position,  MoveList *moveList){ // Generates 
     while(piece){ //While the value of piece is not 0
         ASSERT(isPieceValid(piece)); //Checks if the piece is valid
 
+        for(int index = 0; index < position->pieceNumber[piece]; ++index){ //Loops through every sliding piece on the board
+            square = position->pieceList[piece][index]; //Takes the position of that piece
+            ASSERT(isSquareOnTheBoard(square)); //Checks if square is valid
+
+            for(int directionIndex = 0; directionIndex < numberOfDirections[piece]; ++directionIndex){ //Loops through all the directrion the piece can go to
+                direction = pieceDirections[piece][directionIndex]; //Gets the direction 
+                destinationSquare = square + direction; //Sets the destination square
+                
+                while(indexToFiles[destinationSquare] != offBoardSquare){ // keep going while the destination square still on the board
+                    if(position->boardPieces[destinationSquare]){ //Checks if theres a piece on that destination square
+                        if(pieceColour[position->boardPieces[destinationSquare]] == side ^ 1){ //if the piece on the destination square a different color from the piece moving
+                            addCaptureMove(position, move(square, destinationSquare, position->boardPieces[destinationSquare], emptyPiece, 0), moveList); //Adds the move to the move list
+                        }
+                        break; //breaks the loops once the piece hits another piece
+                    }
+                    addNonCaptureMove(position, move(square, destinationSquare, emptyPiece, emptyPiece, 0), moveList); //Adds the move to the move list
+                    destinationSquare += direction; // Move along that direction
+                }
+            }
+        }
         piece = slidingPiecesLoop[++pieceIndex]; //Go to the next piece
     }
 
@@ -186,23 +242,22 @@ void generateAllMoves(const Board *position,  MoveList *moveList){ // Generates 
         for(int index = 0; index < position->pieceNumber[piece]; ++index){ //Loops through every jumping piece on the board
             square = position->pieceList[piece][index]; //Takes the position of that piece
             ASSERT(isSquareOnTheBoard(square)); //Checks if square is valid
-            cout << "a " << pieceCharacter[piece] << " is on " << printAlgebraicSquareNotation(square) << endl;
 
-            for(int directionIndex = 0; directionIndex < numberOfDirections[piece]; ++directionIndex){
-                direction = pieceDirections[piece][directionIndex];
-                destinationSquare = square + direction;
+            for(int directionIndex = 0; directionIndex < numberOfDirections[piece]; ++directionIndex){ //Loops through all the directrion the piece can go to
+                direction = pieceDirections[piece][directionIndex]; //Gets the direction 
+                destinationSquare = square + direction; //Sets the destination square
+                
                 if(indexToFiles[destinationSquare] == offBoardSquare){ //Checks if the square is off-board
                     continue;
                 }
 
                 if(position->boardPieces[destinationSquare]){ //Checks if theres a piece on that destination square
-                    if(pieceColour[position->boardPieces[destinationSquare]] == side ^ 1){
-                        cout << "Capture Move on " << printAlgebraicSquareNotation(destinationSquare) << endl;
+                    if(pieceColour[position->boardPieces[destinationSquare]] == side ^ 1){ //if the piece on the destination square a different color from the piece moving
+                        addCaptureMove(position, move(square, destinationSquare, position->boardPieces[destinationSquare], emptyPiece, 0), moveList); //Adds the move to the move list
                     }
                     continue;
                 }
-
-                cout << "Normal Move on " << printAlgebraicSquareNotation(destinationSquare) << endl;
+                addNonCaptureMove(position, move(square, destinationSquare, emptyPiece, emptyPiece, 0), moveList); //Adds the move to the move list
             }
         }
         piece = jumpingPiecesLoop[++pieceIndex]; //Go to the next piece

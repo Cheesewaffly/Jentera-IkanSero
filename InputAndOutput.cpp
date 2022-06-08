@@ -43,7 +43,7 @@ void printMoveList(const MoveList *moveList){ //Prints out the move list
         int move = moveList->moves[index].move; //Gets the move
         int score = moveList->moves[index].postitionScore; //Gets the score of that move
 
-        cout << "Move: " << index + 1 << ". " << printMove(move) << ", (score: " << score << ")" << endl;
+        cout << "Move: " << setw(2) << index + 1 << ". " << printMove(move) << ", (score: " << score << ")" << endl;
     }
     cout << "Move list total " << moveList->count << " moves" << endl;
 }

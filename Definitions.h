@@ -2,6 +2,7 @@
 #include <cstdlib> // The C standard library for some useful functions
 #include <iostream>
 #include <bitset>
+#include <iomanip>
 
 using namespace std;
 
