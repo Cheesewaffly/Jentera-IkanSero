@@ -24,4 +24,5 @@ void printBitBoard(U64 bitBoard){ //This is just to visualize the bitboards
         }
         cout << endl;
     }
+    cout << endl;
 }

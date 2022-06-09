@@ -63,6 +63,7 @@ int checkBoard(const Board *position){ //A function to crosscheck wether the inf
     ASSERT(checkMinorPiecesnumber[white] == position->minorPiecesNumber[white] && checkMinorPiecesnumber[black] == position->minorPiecesNumber[black]); //More checks for minor pieces
     ASSERT(checkMajorPiecesnumber[white] == position->majorPiecesNumber[white] && checkMajorPiecesnumber[black] == position->majorPiecesNumber[black]); //More checks for major pieces
     ASSERT(white == position->side || black == position->side); //Check if a side is actually playing
+    // cout << bitset<28>(generatePositionKeys(position)) << endl << position->positionKey << endl;
     ASSERT(generatePositionKeys(position) == position->positionKey); //Checks if the position key is the same
     ASSERT(position->enPassantSquare == emptySquare || (indexToRanks[position->enPassantSquare] == sixthRank && position->side == white) || (indexToRanks[position->enPassantSquare] == thirdRank && position->side == black)) //The en passant square
     ASSERT(position->boardPieces[position->kingSquare[white]] == whiteKing) //Checks if the white king is in place
@@ -85,12 +86,12 @@ void updateMaterialList(Board *position){ //counts the number of pieces and thei
             if(piece == whiteKing){position->kingSquare[white] = square120Array;} //Saves the white king's position
             if(piece == blackKing){position->kingSquare[black] = square120Array;} //Saves the black king's position
             if(piece == whitePawn){ //Checks if that piece is a white pawn
-                setBitBoard(position->pawnBitBoards[white], array120ToArray64[square120Array]); //sets that index's bit in the white pawn bitboard as 1
-                setBitBoard(position->pawnBitBoards[both], array120ToArray64[square120Array]); //sets that index's bit in the pawn bitboard as 1
+                setBit(position->pawnBitBoards[white], array120ToArray64[square120Array]); //sets that index's bit in the white pawn bitboard as 1
+                setBit(position->pawnBitBoards[both], array120ToArray64[square120Array]); //sets that index's bit in the pawn bitboard as 1
             }
             else if(piece == blackPawn){//Checks if that piece is a black pawn
-                setBitBoard(position->pawnBitBoards[black], array120ToArray64[square120Array]); //sets that index's bit in the black pawn bitboard as 1
-                setBitBoard(position->pawnBitBoards[both], array120ToArray64[square120Array]); //sets that index's bit in the pawn bitboard as 1
+                setBit(position->pawnBitBoards[black], array120ToArray64[square120Array]); //sets that index's bit in the black pawn bitboard as 1
+                setBit(position->pawnBitBoards[both], array120ToArray64[square120Array]); //sets that index's bit in the pawn bitboard as 1
             }
 
             position->materialScore[colour] += pieceValue[piece]; //Adds that piece's value to the total material score on each color
@@ -209,11 +210,14 @@ void resetBoard(Board *position){ //A function to reset basically everything the
         position->boardPieces[array64ToArray120[index]] = emptyPiece; //Sets all these squares to an empty square
     }
 
-    for(int index = 0; index < 3; ++index){ //Loops through all the squares on the board for the classifications of the pieces
+    for(int index = 0; index < 2; ++index){ //Loops through all the squares on the board for the classifications of the pieces
         position->bigPiecesNumber[index] = 0; //Resets the number of big pieces on the board
         position->minorPiecesNumber[index] = 0; //Resets the number of minor pieces on the board
         position->majorPiecesNumber[index] = 0; //Resets the number of major pieces on the board
         position->materialScore[index] = 0; //Resets the material score on the board
+    }
+
+    for(int index = 0; index < 3; ++index){ //Loops through all the squares on the board for pawn bit boards
         position->pawnBitBoards[index] = 0ULL; //Resets the number of pawns on the board;
     }
 
@@ -227,7 +231,7 @@ void resetBoard(Board *position){ //A function to reset basically everything the
     position->fiftyMoveRule = 0; //Resets the fifty move counter
     position->castlePermission = 0; //Resets castling permissions
     position->ply = 0; //Resets the half-move count
-    position->hisPly = 0; //Resets the half-move history
+    position->historyPly = 0; //Resets the half-move history
     position->positionKey = 0ULL; //Resets the current position key
 }
 

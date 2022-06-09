@@ -6,14 +6,20 @@
 
 using namespace std;
 
+#define DEBUG
+#ifndef DEBUG
+#define ASSERT(error)
+#else
+#define ASSERT(error) if(!(error)){cout << #error << " - Failed in file " << __FILE__ << " at line " << __LINE__; exit(1);} // Error detection
+#endif
+
 #define NAME "Jentera IkanSero v1.0" //This just replaces every NAME with "Jentera IkanSero v1.0" in the code
 #define boardSquareNumber 120 //We are using a 12x10 board representation
 #define maxGameMoves 2048 //The maximum number of moves in a game, to save memory
 #define maxPositionMoves 256 //The maximum number of moves in a given position
 #define coordinatesTo120ArrayIndex(files, ranks) ((21 + files) + (10 * ranks)) //Converts the coordinates of a square to the index of the 120 array
-#define clearBitBoard(bitBoard, index) ((bitBoard) &= clearBitBoardMask[index]) //Clears the bitboard
-#define setBitBoard(bitBoard, index) ((bitBoard) |= setBitBoardMask[index]) //Sets the bitboard
-#define ASSERT(error) if(!(error)){cout << #error << " - Failed in file " << __FILE__ << " at line " << __LINE__; exit(1);} // Error detection
+#define clearBit(bitBoard, index) ((bitBoard) &= clearBitBoardMask[index]) //Clears a bit on a bitboard
+#define setBit(bitBoard, index) ((bitBoard) |= setBitBoardMask[index]) //Sets a bit on a bitboard
 #define originalSquare(square) (square & 0x7F) //Used to make a move, the origin square is represented by the first 7 bits of a 28 bit number   (0000 0000 0000 0000 0000 0111 1111)
 #define destinationSquare(square) ((square >> 7) & 0x7F) //The destination square is represented by the next 7 bits of a 28 bit number          (0000 0000 0000 0011 1111 1000 0000)
 #define pieceCaptured(piece) ((piece >> 14) & 0xF)  //The piece captured is represented by the next 4 bits of a 28 bit number                   (0000 0000 0011 1100 0000 0000 0000)
@@ -55,7 +61,7 @@ struct MoveList{ //All the possible moves given a position
 
 struct UndoMove{
     int move; //Stores the number of moves that has been played
-    int enPassant; //Stores en passant squares
+    int enPassantSquare; //Stores en passant squares
     int fiftyMoveRule; //Stores the fifty move counter
     int castlePermission; // Stores the castling permission
 
@@ -69,7 +75,7 @@ struct Board{
     int enPassantSquare; //Stores en passant squares
     int fiftyMoveRule; //Stores the fifty move counter
     int ply; //Stores how many half-moves are searched
-    int hisPly; //Stores ply history
+    int historyPly; //Stores ply history
     int pieceNumber[13]; //Stores the number of the 13 types (including the empty square) of pieces are on the board
     int bigPiecesNumber[2]; //Stores how many big pieces (not pawns) are on each side
     int majorPiecesNumber[2]; //Stores how many major pieces (rooks and queens) are on each side, used to evaluate endgames
@@ -92,6 +98,8 @@ extern void parseFENString(const char *FENString, Board *position); //To set up 
 extern void updateMaterialList(Board *position); //counts the number of pieces and their classifications
 extern void generateAllMoves(const Board *position,  MoveList *moveList); // Generates all possible moves
 extern void printMoveList(const MoveList *moveList); //Prints out the move list
+extern void undoMove(Board *position); //To undo the move
+extern void perftTest(int depth, Board *position); //Main perft tester
 
 extern int array120ToArray64[boardSquareNumber]; //To convert the 12x10 index to a 8x8 index (BAD PRACTICE TO DEFINE GLOBAL VARIABLES!!)
 extern int array64ToArray120[64]; //To convert the 8x8 index to a 12x10 index
@@ -100,6 +108,8 @@ extern int countBit(U64 bitBoard); //Takes a bitboard and counts the number of b
 extern int bigPieces[13]; //Specifies all non-pawn pieces
 extern int majorPieces[13]; //Specifies the rook and the queen
 extern int minorPieces[13]; //Specifies the bishop and the knight
+extern int pawnPieces[13]; //Specifies all pawn piece
+extern int kingPieces[13]; //Specifies the king
 extern int pieceColour[13]; //Specifies the piece color
 extern int pieceValue[13]; //Specifies the value of each piece
 extern int indexToFiles[boardSquareNumber]; //Converts the index to a file letter
@@ -131,3 +141,4 @@ extern bool isASidePlaying(const int side); //checks a side is playing
 extern bool isFileOrRankValid(const int fileOrRank); //checks if the square is valid
 extern bool isPieceValidOrEmpty(const int piece); //checks if the piece is valid or empty
 extern bool isPieceValid(const int piece); //checks if the piece is valid
+extern bool makeMove(Board *position, int move); //To make the move

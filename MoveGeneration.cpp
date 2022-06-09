@@ -2,11 +2,11 @@
 
 #define move(origin, destination, capture, promotion, castleOrEnPassantOrDoubleMove) (origin | (destination << 7) | (capture << 14) | (promotion << 20) | castleOrEnPassantOrDoubleMove) //A move
 
-int slidingPiecesLoop[8] = {whiteBishop, whiteRook, whiteQueen, 0 , blackBishop, blackRook, blackQueen, 0}; //To loop between sliding pieces
-int jumpingPiecesLoop[6] = {whiteKnight, whiteKing,  0 , blackKnight, blackKing, 0}; //To loop between jumping pieces
-int slidingPiecesLoopIndex[2] = {0, 4}; //Tells when to start the piece sliding loop
-int jumpingPiecesLoopIndex[2] = {0, 3}; //Tells when to start the piece jumping loop
-int pieceDirections[13][8] = {
+const int slidingPiecesLoop[8] = {whiteBishop, whiteRook, whiteQueen, 0 , blackBishop, blackRook, blackQueen, 0}; //To loop between sliding pieces
+const int jumpingPiecesLoop[6] = {whiteKnight, whiteKing,  0 , blackKnight, blackKing, 0}; //To loop between jumping pieces
+const int slidingPiecesLoopIndex[2] = {0, 4}; //Tells when to start the piece sliding loop
+const int jumpingPiecesLoopIndex[2] = {0, 3}; //Tells when to start the piece jumping loop
+const int pieceDirections[13][8] = {
     {0, 0, 0, 0, 0, 0, 0, 0}, //Move directions of an empty piece
     {0, 0, 0, 0, 0, 0, 0, 0}, //Move directions of a pawn
     {-21, -19, -12, -8, 8, 12, 19, 21}, //Move directions of a knight
@@ -21,27 +21,27 @@ int pieceDirections[13][8] = {
     {-10, -1, 1, 10, -11, -9, 9, 11}, //Move directions of a queen
     {-10, -1, 1, 10, -11, -9, 9, 11}, //Move directions of a king
 };
-int numberOfDirections[13] = {0, 0, 8, 4, 4, 8, 8, 0, 8, 4, 4, 8, 8};
+const int numberOfDirections[13] = {0, 0, 8, 4, 4, 8, 8, 0, 8, 4, 4, 8, 8};
 
-void addNonCaptureMove(const Board *position, int move, MoveList *moveList){ //Adds a non capture move to the movelist
+static void addNonCaptureMove(const Board *position, int move, MoveList *moveList){ //Adds a non capture move to the movelist
     moveList->moves[moveList->count].move = move; //The movelist structure contains an array of the move structure (hence the . operator)
     moveList->moves[moveList->count].postitionScore = 0;
     moveList->count++; //Adds that move to the counter
 }
 
-void addCaptureMove(const Board *position, int move, MoveList *moveList){ //Adds a capture move to the movelist
+static void addCaptureMove(const Board *position, int move, MoveList *moveList){ //Adds a capture move to the movelist
     moveList->moves[moveList->count].move = move; //The movelist structure contains an array of the move structure (hence the . operator)
     moveList->moves[moveList->count].postitionScore = 0;
     moveList->count++; //Adds that move to the counter
 }
 
-void addEnPassantMove(const Board *position, int move, MoveList *moveList){ //Adds an en passant capture move to the movelist
+static void addEnPassantMove(const Board *position, int move, MoveList *moveList){ //Adds an en passant capture move to the movelist
     moveList->moves[moveList->count].move = move; //The movelist structure contains an array of the move structure (hence the . operator)
     moveList->moves[moveList->count].postitionScore = 0;
     moveList->count++; //Adds that move to the counter
 }
 
-void addWhitePawnCaptureMove(const Board *position, const int originalSquare, const int destinationSquare, const int capturedPiece, MoveList *moveList){ //Checks if a white pawn is promoting
+static void addWhitePawnCaptureMove(const Board *position, const int originalSquare, const int destinationSquare, const int capturedPiece, MoveList *moveList){ //Checks if a pawn is promoting
     ASSERT(isPieceValidOrEmpty(capturedPiece)); //Checks if the captured piece is valid
     ASSERT(isSquareOnTheBoard(originalSquare)); //Checks if the original square is valid
     ASSERT(isSquareOnTheBoard(destinationSquare)); //Checks if the destination square is valid
@@ -56,7 +56,7 @@ void addWhitePawnCaptureMove(const Board *position, const int originalSquare, co
     }
 }
 
-void addWhitePawnMove(const Board *position, const int originalSquare, const int destinationSquare, MoveList *moveList){ //Checks if a white pawn is promoting
+static void addWhitePawnMove(const Board *position, const int originalSquare, const int destinationSquare, MoveList *moveList){ //Checks if a white pawn is promoting
     ASSERT(isSquareOnTheBoard(originalSquare)); //Checks if the original square is valid
     ASSERT(isSquareOnTheBoard(destinationSquare)); //Checks if the destination square is valid
     
@@ -70,7 +70,7 @@ void addWhitePawnMove(const Board *position, const int originalSquare, const int
     }
 }
 
-void addBlackPawnCaptureMove(const Board *position, const int originalSquare, const int destinationSquare, const int capturedPiece, MoveList *moveList){ //Checks if a black pawn is promoting
+static void addBlackPawnCaptureMove(const Board *position, const int originalSquare, const int destinationSquare, const int capturedPiece, MoveList *moveList){ //Checks if a pawn is promoting
     ASSERT(isPieceValidOrEmpty(capturedPiece)); //Checks if the captured piece is valid
     ASSERT(isSquareOnTheBoard(originalSquare)); //Checks if the original square is valid
     ASSERT(isSquareOnTheBoard(destinationSquare)); //Checks if the destination square is valid
@@ -85,7 +85,7 @@ void addBlackPawnCaptureMove(const Board *position, const int originalSquare, co
     }
 }
 
-void addBlackPawnMove(const Board *position, const int originalSquare, const int destinationSquare, MoveList *moveList){ //Checks if a black pawn is promoting
+static void addBlackPawnMove(const Board *position, const int originalSquare, const int destinationSquare, MoveList *moveList){ //Checks if a black pawn is promoting
     ASSERT(isSquareOnTheBoard(originalSquare)); //Checks if the original square is valid
     ASSERT(isSquareOnTheBoard(destinationSquare)); //Checks if the destination square is valid
 
@@ -131,13 +131,14 @@ void generateAllMoves(const Board *position,  MoveList *moveList){ // Generates 
             if(isSquareOnTheBoard(square + 11) && pieceColour[position->boardPieces[square + 11]] == black){ //Adds capture to the left
                 addWhitePawnCaptureMove(position, square, square + 11, position->boardPieces[square + 11], moveList); //Adds that move to the movelist
             }
+            if(position->enPassantSquare != emptySquare){ //Checks if the en passant square is on the board
+                if(square + 9 == position->enPassantSquare){ //Adds capture to the en passant right
+                    addEnPassantMove(position, move(square, square + 9, emptyPiece, emptyPiece, enPassantMove), moveList); //Adds that move to the movelist
+                }
 
-            if(square + 9 == position->enPassantSquare){ //Adds capture to the en passant right
-                addCaptureMove(position, move(square, square + 9, emptyPiece, emptyPiece, enPassantMove), moveList); //Adds that move to the movelist
-            }
-
-            if(square + 11 == position->enPassantSquare){ //Adds capture to the en passant left
-                addCaptureMove(position, move(square, square + 11, emptyPiece, emptyPiece, enPassantMove), moveList); //Adds that move to the movelist
+                if(square + 11 == position->enPassantSquare){ //Adds capture to the en passant left
+                    addEnPassantMove(position, move(square, square + 11, emptyPiece, emptyPiece, enPassantMove), moveList); //Adds that move to the movelist
+                }
             }
         }
 
@@ -178,12 +179,14 @@ void generateAllMoves(const Board *position,  MoveList *moveList){ // Generates 
                 addBlackPawnCaptureMove(position, square, square - 11, position->boardPieces[square - 11], moveList); //Adds that move to the movelist
             }
 
-            if(square - 9 == position->enPassantSquare){ //Adds capture to the en passant right
-                addCaptureMove(position, move(square, square - 9, emptyPiece, emptyPiece, enPassantMove), moveList); //Adds that move to the movelist
-            }
+            if(position->enPassantSquare != emptySquare){ //Checks if the en passant square is on the board
+                if(square - 9 == position->enPassantSquare){ //Adds capture to the en passant right
+                    addEnPassantMove(position, move(square, square - 9, emptyPiece, emptyPiece, enPassantMove), moveList); //Adds that move to the movelist
+                }
 
-            if(square - 11 == position->enPassantSquare){ //Adds capture to the en passant left
-                addCaptureMove(position, move(square, square - 11, emptyPiece, emptyPiece, enPassantMove), moveList); //Adds that move to the movelist
+                if(square - 11 == position->enPassantSquare){ //Adds capture to the en passant left
+                    addEnPassantMove(position, move(square, square - 11, emptyPiece, emptyPiece, enPassantMove), moveList); //Adds that move to the movelist
+                }
             }
         }
 
