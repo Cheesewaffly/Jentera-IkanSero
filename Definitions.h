@@ -3,6 +3,8 @@
 #include <iostream>
 #include <bitset>
 #include <iomanip>
+#include <sstream>
+#include <fstream>
 
 using namespace std;
 
@@ -100,6 +102,7 @@ extern void generateAllMoves(const Board *position,  MoveList *moveList); // Gen
 extern void printMoveList(const MoveList *moveList); //Prints out the move list
 extern void undoMove(Board *position); //To undo the move
 extern void perftTest(int depth, Board *position); //Main perft tester
+extern void parsePerft(Board *position, int depth); //Automatically parse the file to test
 
 extern int array120ToArray64[boardSquareNumber]; //To convert the 12x10 index to a 8x8 index (BAD PRACTICE TO DEFINE GLOBAL VARIABLES!!)
 extern int array64ToArray120[64]; //To convert the 8x8 index to a 12x10 index
@@ -109,7 +112,6 @@ extern int bigPieces[13]; //Specifies all non-pawn pieces
 extern int majorPieces[13]; //Specifies the rook and the queen
 extern int minorPieces[13]; //Specifies the bishop and the knight
 extern int pawnPieces[13]; //Specifies all pawn piece
-extern int kingPieces[13]; //Specifies the king
 extern int pieceColour[13]; //Specifies the piece color
 extern int pieceValue[13]; //Specifies the value of each piece
 extern int indexToFiles[boardSquareNumber]; //Converts the index to a file letter

@@ -174,17 +174,17 @@ void parseFENString(const char *FENString, Board *position){ //To set up the boa
         if(*FENString == ' '){break;} //Breaks the loop if it hits a blank space
 
         switch(*FENString){ //if its not a blank space then it will combine the permissions together (using the OR operator)
-            case 'K': position->castlePermission |= whiteKingsideCastling; //White kingside castling (0001)
-            case 'Q': position->castlePermission |= whiteQueensideCastling; //White queenside castling (0010)
-            case 'k': position->castlePermission |= blackKingsideCastling; //Black kingside castling (0100)
-            case 'q': position->castlePermission |= blackQueensideCastling; //Black queenside castling (1000)
+            case 'K': position->castlePermission |= whiteKingsideCastling; break;//White kingside castling (0001)
+            case 'Q': position->castlePermission |= whiteQueensideCastling; break; //White queenside castling (0010)
+            case 'k': position->castlePermission |= blackKingsideCastling; break; //Black kingside castling (0100)
+            case 'q': position->castlePermission |= blackQueensideCastling; break; //Black queenside castling (1000)
             default: break; //If there is a '-' then break the loop
         }
 
         FENString++; //move on to the next character
     }
-
     FENString++;
+
     ASSERT(position->castlePermission >= 0 && position->castlePermission <= 15) //Makes sure the castle permission value is within the defined range
 
     if(*FENString != '-'){ //If its not a '-' then there is an en passant square
@@ -258,5 +258,5 @@ void printBoard(const Board *position){ //To print the board on the console
     cout << char(position->castlePermission & whiteQueensideCastling ? 'Q':'-'); //prints if white can castle queenside
     cout << char(position->castlePermission & blackKingsideCastling ? 'k':'-'); //prints if black can castle kingside
     cout << char(position->castlePermission & blackQueensideCastling ? 'q':'-') << endl; //prints if black can castle queenkingside
-    cout << "Position key: " << hex << uppercase << position->positionKey << dec << endl << endl; //Prints the current position key
+    cout << "Position key: " << hex << uppercase << position->positionKey << dec << endl; //Prints the current position key
 }

@@ -7,8 +7,6 @@ int main()
     Board board[1];
     MoveList moveList[1];
     
-    parseFENString(" ", board);
-    perftTest(6, board);
-    
-    return 0;
+    parsePerft(board, 6);
+    getchar();
 }

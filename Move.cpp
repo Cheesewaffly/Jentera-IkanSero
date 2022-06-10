@@ -86,33 +86,33 @@ static void addPiece(const int square, Board *position, const int piece){ //Adds
     position->pieceList[piece][position->pieceNumber[piece]++] = square; //Changes the value of the square of that piece on the piece list
 }
 
-static void movePiece(int originalSquare, int destinationSquare, Board *position){ //Moves the piece on the board
-    ASSERT(isSquareOnTheBoard(originalSquare)); //Checks if the original square is valid
-    ASSERT(isSquareOnTheBoard(destinationSquare)); //Checks if the destination square is valid
+static void movePiece(int squareOfOrigin, int targetSquare, Board *position){ //Moves the piece on the board
+    ASSERT(isSquareOnTheBoard(squareOfOrigin)); //Checks if the original square is valid
+    ASSERT(isSquareOnTheBoard(targetSquare)); //Checks if the destination square is valid
     
-    int piece = position->boardPieces[originalSquare]; //Gets the piece on that square
+    int piece = position->boardPieces[squareOfOrigin]; //Gets the piece on that square
     int colour = pieceColour[piece]; //Gets the colour of the piece
 
     #ifdef DEBUG //Only in debug mode (for debugging)
         int pieceIndex = false;
     #endif
 
-    hashPiece(piece, originalSquare); //Hashes out the piece from the original square from the position key
-    position->boardPieces[originalSquare] = emptyPiece; //Clears the piece from that square
+    hashPiece(piece, squareOfOrigin); //Hashes out the piece from the original square from the position key
+    position->boardPieces[squareOfOrigin] = emptyPiece; //Clears the piece from that square
 
-    hashPiece(piece, destinationSquare); //Hashes in the piece to the destination square from the position key
-    position->boardPieces[destinationSquare] = piece; //Adds the piece to that square
+    hashPiece(piece, targetSquare); //Hashes in the piece to the destination square from the position key
+    position->boardPieces[targetSquare] = piece; //Adds the piece to that square
 
     if(!bigPieces[piece]){ //If the piece is a pawn
-        clearBit(position->pawnBitBoards[colour], array120ToArray64[originalSquare]); //Clear that colour's pawn bitboard
-        clearBit(position->pawnBitBoards[both], array120ToArray64[originalSquare]); //Clears the pawn bitboard
-        setBit(position->pawnBitBoards[colour], array120ToArray64[destinationSquare]); //adds a bit to that colour's pawn bitboard
-        setBit(position->pawnBitBoards[both], array120ToArray64[destinationSquare]); //adds a bit to the pawn bitboard
+        clearBit(position->pawnBitBoards[colour], array120ToArray64[squareOfOrigin]); //Clear that colour's pawn bitboard
+        clearBit(position->pawnBitBoards[both], array120ToArray64[squareOfOrigin]); //Clears the pawn bitboard
+        setBit(position->pawnBitBoards[colour], array120ToArray64[targetSquare]); //adds a bit to that colour's pawn bitboard
+        setBit(position->pawnBitBoards[both], array120ToArray64[targetSquare]); //adds a bit to the pawn bitboard
     }
 
     for(int index = 0; index < position->pieceNumber[piece]; ++index){ //Loops through all of that piece's type on the board
-        if(position->pieceList[piece][index] == originalSquare){ //if its actually the piece we're looking for
-            position->pieceList[piece][index] = destinationSquare; //changes the location of the piece
+        if(position->pieceList[piece][index] == squareOfOrigin){ //if its actually the piece we're looking for
+            position->pieceList[piece][index] = targetSquare; //changes the location of the piece
 
             #ifdef DEBUG
             pieceIndex = true;
@@ -127,27 +127,27 @@ static void movePiece(int originalSquare, int destinationSquare, Board *position
 bool makeMove(Board *position, int move){ //To make the move
     ASSERT(checkBoard(position)); //Checks if the board is in order
 
-    int originalSquare = originalSquare(move); //Gets the original square of the move
-    int destinationSquare = destinationSquare(move); //Gets the destination square of the move
+    int squareOfOrigin = originalSquare(move); //Gets the original square of the move
+    int targetSquare = destinationSquare(move); //Gets the destination square of the move
     int side = position->side; //Gets the side who is playing
 
-    ASSERT(isSquareOnTheBoard(originalSquare)); //Checks if the original square is valid
-    ASSERT(isSquareOnTheBoard(destinationSquare)); //Checks if the destination square is valid
+    ASSERT(isSquareOnTheBoard(squareOfOrigin)); //Checks if the original square is valid
+    ASSERT(isSquareOnTheBoard(targetSquare)); //Checks if the destination square is valid
     ASSERT(isASidePlaying(side)) //Checks if the side is valid
-    ASSERT(isPieceValid(position->boardPieces[originalSquare])) //Checks if the piece is valid
+    ASSERT(isPieceValid(position->boardPieces[squareOfOrigin])) //Checks if the piece is valid
 
     position->history[position->historyPly].positionKey = position->positionKey; //Stores the position key in the history
 
     if(move & enPassantMove){ //If the move is an en passant move
         if(side == white){ //If white to move
-            clearPiece(destinationSquare-10, position); //captures a black pawn
+            clearPiece(targetSquare-10, position); //captures a black pawn
         }else{ //If black to move
-            clearPiece(destinationSquare+10, position); //captures a white pawn
+            clearPiece(targetSquare+10, position); //captures a white pawn
         }
     }
     
     else if(move & castlingMove){ //if the move is a castling move
-        switch(destinationSquare){
+        switch(targetSquare){
             case C1: //if the king moves to C1
                 movePiece(A1, D1, position); //Move the rook to D1
                 break;
@@ -175,49 +175,49 @@ bool makeMove(Board *position, int move){ //To make the move
     position->history[position->historyPly].enPassantSquare = position->enPassantSquare; //stores the en passant square
     position->history[position->historyPly].castlePermission = position->castlePermission; //stores the castle permissions
     
-    position->castlePermission &= castlingPermissionsArray[originalSquare]; //updates the castling permission
-    position->castlePermission &= castlingPermissionsArray[destinationSquare]; //updates the castling permission
+    position->castlePermission &= castlingPermissionsArray[squareOfOrigin]; //updates the castling permission
+    position->castlePermission &= castlingPermissionsArray[targetSquare]; //updates the castling permission
     position->enPassantSquare = emptySquare;
 
     hashCastling;  //hashes in the updated castling permissions in the position key
     
+    int capturedPiece = pieceCaptured(move); //Gets the piece captured
     position->fiftyMoveRule++; //increments the fifty move rule
 
-    int capturedPiece = pieceCaptured(move); //Gets the piece captured
     if(capturedPiece != emptyPiece){ //If the piece captured is not an empty piece
         ASSERT(isPieceValid(capturedPiece)); //Checks if the piece captured is valid
-        clearPiece(destinationSquare, position); //Clears the piece on that board
+        clearPiece(targetSquare, position); //Clears the piece on that board
         position->fiftyMoveRule = 0; //Resets the fifty move rule
     }
 
     position->historyPly++; //Increments the ply history
     position->ply++; //Increments the half-moves that are searched
 
-    if(pawnPieces[position->boardPieces[originalSquare]]){ //If its a pawn move
+    if(pawnPieces[position->boardPieces[squareOfOrigin]]){ //If its a pawn move
         position->fiftyMoveRule = 0; //Resets the fifty move rule
         if(move & doublePawnMove){ //If its a double pawn move
             if(side == white){ //If white to move
-                position->enPassantSquare = originalSquare + 10; //Sets the en passant square
+                position->enPassantSquare = squareOfOrigin + 10; //Sets the en passant square
                 ASSERT(indexToRanks[position->enPassantSquare] == thirdRank); //Checks if the en passant square is correct
             }else{ //If black to move
-                position->enPassantSquare = originalSquare - 10; //Sets the en passant square
+                position->enPassantSquare = squareOfOrigin - 10; //Sets the en passant square
                 ASSERT(indexToRanks[position->enPassantSquare] == sixthRank); //Checks if the en passant square is correct
             }
             hashEnPassant; //Hashes the en passant square back in the position key
         }
     }
 
-    movePiece(originalSquare, destinationSquare, position); //Finally moves the piece to the destination square
+    movePiece(squareOfOrigin, targetSquare, position); //Finally moves the piece to the destination square
 
     int promotedPiece = piecePromotedTo(move); //Gets the piece promoted to
     if(promotedPiece != emptyPiece){
         ASSERT(isPieceValid(promotedPiece) && !pawnPieces[promotedPiece]); //checks if the piece promoted to is valid
-        clearPiece(destinationSquare, position); //Clears the promotion square
-        addPiece(destinationSquare, position, promotedPiece); //Adds the piece promoted to
+        clearPiece(targetSquare, position); //Clears the promotion square
+        addPiece(targetSquare, position, promotedPiece); //Adds the piece promoted to
     }
 
-    if(kingPieces[position->boardPieces[destinationSquare]]){ //if its a king move
-        position->kingSquare[position->side] = destinationSquare; //Updates the position of the king
+    if(isItAKing[position->boardPieces[targetSquare]]){ //if its a king move
+        position->kingSquare[position->side] = targetSquare; //Updates the position of the king
     }
 
     position->side ^= 1; //Switches the side (position->side is now enemy side, side is the original move maker's side)
@@ -240,11 +240,11 @@ void undoMove(Board *position){ //To undo the move
     position->ply--; //Decrements the half-moves that are searched
 
     int move = position->history[position->historyPly].move; //Gets the move from history
-    int originalSquare = originalSquare(move); //Gets the original square of the move
-    int destinationSquare = destinationSquare(move); //Gets the destination square of the move
+    int squareOfOrigin = originalSquare(move); //Gets the original square of the move
+    int targetSquare = destinationSquare(move); //Gets the destination square of the move
 
-    ASSERT(isSquareOnTheBoard(originalSquare)); //Checks if the original square is valid
-    ASSERT(isSquareOnTheBoard(destinationSquare)); //Checks if the destination square is valid
+    ASSERT(isSquareOnTheBoard(squareOfOrigin)); //Checks if the original square is valid
+    ASSERT(isSquareOnTheBoard(targetSquare)); //Checks if the destination square is valid
 
     if(position->enPassantSquare != emptySquare){hashEnPassant;} //hashes the en passant square out of the position key (to be replaced, or be set to empty square)
     hashCastling; //hashes out the castling permissions out of the position key
@@ -261,14 +261,14 @@ void undoMove(Board *position){ //To undo the move
 
     if(move & enPassantMove){ //If the move is an en passant move
         if(position->side == white){ //If white to move
-            addPiece(destinationSquare-10, position, blackPawn); //Readds a black pawn
+            addPiece(targetSquare-10, position, blackPawn); //Readds a black pawn
         }else{ //If black to move
-            addPiece(destinationSquare+10, position, whitePawn); //Readds a white pawn
+            addPiece(targetSquare+10, position, whitePawn); //Readds a white pawn
         }
     }
     
     else if(move & castlingMove){ //if the move is a castling move
-        switch(destinationSquare){
+        switch(targetSquare){
             case C1: //if the king moves to C1
                 movePiece(D1, A1, position); //Move the rook back to A1
                 break;
@@ -287,23 +287,23 @@ void undoMove(Board *position){ //To undo the move
         }
     }
 
-    movePiece(destinationSquare, originalSquare, position); //Finally moves the piece to the original square
+    movePiece(targetSquare, squareOfOrigin, position); //Finally moves the piece to the original square
 
-    if(kingPieces[position->boardPieces[originalSquare]]){ //if its a king move
-        position->kingSquare[position->side] = originalSquare; //Updates the position of the king
+    if(isItAKing[position->boardPieces[squareOfOrigin]]){ //if its a king move
+        position->kingSquare[position->side] = squareOfOrigin; //Updates the position of the king
     }
 
     int capturedPiece = pieceCaptured(move); //Gets the piece captured
     if(capturedPiece != emptyPiece){ //If the piece captured is not an empty piece
         ASSERT(isPieceValid(capturedPiece)); //Checks if the piece captured is valid
-        addPiece(destinationSquare, position, capturedPiece); //Clears the piece on that board
+        addPiece(targetSquare, position, capturedPiece); //Clears the piece on that board
     }
 
     int promotedPiece = piecePromotedTo(move); //Gets the piece promoted to
     if(promotedPiece != emptyPiece){
         ASSERT(isPieceValid(promotedPiece) && !pawnPieces[promotedPiece]); //checks if the piece promoted to is valid
-        clearPiece(originalSquare, position); //Clears the piece promoted to
-        addPiece(originalSquare, position, pieceColour[promotedPiece] == white ? whitePawn:blackPawn); //Adds the pawn back to
+        clearPiece(squareOfOrigin, position); //Clears the piece promoted to
+        addPiece(squareOfOrigin, position, (pieceColour[promotedPiece] == white ? whitePawn : blackPawn)); //Adds the pawn back to
     }
 
     ASSERT(checkBoard(position)); //Checks if the board is in order
