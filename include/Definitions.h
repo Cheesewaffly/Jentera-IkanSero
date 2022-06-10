@@ -8,7 +8,7 @@
 
 using namespace std;
 
-#define DEBUG
+//#define DEBUG
 #ifndef DEBUG
 #define ASSERT(error)
 #else

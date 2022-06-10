@@ -44,7 +44,7 @@ void perftTest(int depth, Board *position){ //Main perft tester
         
         U64 oldLeafNodes = leafNodes - cummulativeLeafNodes; //The amoung of leafnodes for each root move
 
-        cout << "move " << setw(2) << moveNumber + 1 << ". " << printMove(move) << " : " << oldLeafNodes << endl;
+        cout << "Move: " << printMove(move) << " : " << oldLeafNodes << endl;
     }
     cout << "Complete: " << leafNodes << " nodes visited" << endl;
 
@@ -54,7 +54,7 @@ void perftTest(int depth, Board *position){ //Main perft tester
 void parsePerft(Board *position, int depth){ //Automatically parse the file to test
     int positionNumber = 1; //Used to count how many position is checked
 
-    ifstream file("perft.txt"); //Gets the file
+    ifstream file("./doc/perft.txt"); //Gets the file
     if(file.is_open()){ //Opens the file
         string line; //Gets the line in the file
 
