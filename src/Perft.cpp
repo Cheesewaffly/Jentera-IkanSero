@@ -46,7 +46,7 @@ void perftTest(int depth, Board *position){ //Main perft tester
         
         U64 oldLeafNodes = leafNodes - cummulativeLeafNodes; //The amoung of leafnodes for each root move
 
-        cout << "Move: " << printMove(move) << " : " << oldLeafNodes << endl;
+        cout << "Move " << printMove(move) << ": " << oldLeafNodes << endl;
     }
     cout << "Complete: " << leafNodes << " nodes visited" << endl;
 
