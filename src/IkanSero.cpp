@@ -8,5 +8,4 @@ int main()
     MoveList moveList[1];
     
     parsePerft(board, 1);
-    getchar();
 }
