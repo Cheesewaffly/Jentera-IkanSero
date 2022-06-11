@@ -1,4 +1,6 @@
 #include "Definitions.h"
+#include <fstream>
+#include <sstream>
 
 U64 leafNodes; //the number of leaf nodes
 
@@ -54,24 +56,23 @@ void perftTest(int depth, Board *position){ //Main perft tester
 void parsePerft(Board *position, int depth){ //Automatically parse the file to test
     int positionNumber = 1; //Used to count how many position is checked
 
-    ifstream file("./doc/perft.txt"); //Gets the file
+    ifstream file("./res/perft.txt"); //Gets the file
     if(file.is_open()){ //Opens the file
         string line; //Gets the line in the file
 
         while(getline(file, line)){ //While the file is open
             const char *perftString = line.c_str();
 
-            ostringstream string;
-            ostringstream depthNodesString[depth]; //Gets the FEN string from the file
+            ostringstream FENString, depthNodesString[depth]; //Gets the FEN string from the file
             U64 depthNodesInt[depth]; //Stores the leaf nodes in the form of a number
 
             while(*perftString != ';'){ //Gets the FEN string from the file
-                string << *perftString; //inserts the character into the string
+                FENString << *perftString; //inserts the character into the string
                 perftString++;// moves on to the next character
             }
 
-            cout << endl << "Position " << positionNumber << ": " << string.str().c_str() << endl << endl;
-            parseFENString(string.str().c_str(), position); //Parses the fenstring to the board
+            cout << endl << "Position " << positionNumber << ": " << FENString.str().c_str() << endl << endl;
+            parseFENString(FENString.str().c_str(), position); //Parses the fenstring to the board
             printBoard(position); //Prints the board
 
             for(int leafDepth = 0; leafDepth < depth; leafDepth++){

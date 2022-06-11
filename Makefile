@@ -1,13 +1,16 @@
-CC = g++
+CCG = g++
+CCCLANG = clang++
 CFLAGS = -std=c++2b -Wno-parentheses -Iinclude/ -Idoc/
 
 SOURCES := $(wildcard src/*.cpp)
-OBJECTS := $(patsubst src/%.cpp, bin/%.o, $(SOURCES))
+OBJECTS := $(patsubst src/%.cpp, bin/obj/%.o, $(SOURCES))
 
 All: build
 
-bin/%.o: src/%.cpp
-	$(CC) $(CFLAGS) -c $< -o $@
+bin/obj/%.o: src/%.cpp
+	$(CCG) $(CFLAGS) -c $< -o $@
+	$(CCCLANG) $(CFLAGS) -c $< -o $@
 
 build: $(OBJECTS)
-	$(CC) $(CFLAGS) $^ -o bin/is$(CC)
+	$(CCG) $(CFLAGS) $^ -o bin/ISG++
+	$(CCCLANG) $(CFLAGS) $^ -o bin/ISCL++

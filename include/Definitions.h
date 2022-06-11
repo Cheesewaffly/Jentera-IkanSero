@@ -1,14 +1,10 @@
 #pragma once
 #include <cstdlib> // The C standard library for some useful functions
 #include <iostream>
-#include <bitset>
-#include <iomanip>
-#include <sstream>
-#include <fstream>
 
 using namespace std;
 
-//#define DEBUG
+#define DEBUG
 #ifndef DEBUG
 #define ASSERT(error)
 #else

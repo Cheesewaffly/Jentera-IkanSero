@@ -1,4 +1,5 @@
 #include "Definitions.h"
+#include <iomanip>
 
 char *printAlgebraicSquareNotation(const int square){ //Converts the square index to an algebraic notation
     static char squareNotation[3]; //needs 3 characters e.g e8q (that q is a queen defining a pawn promotion)
