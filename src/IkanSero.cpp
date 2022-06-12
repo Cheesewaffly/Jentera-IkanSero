@@ -1,7 +1,6 @@
 #include "Definitions.h"
 
-int main()
-{
+int main(){
     initializeAll();
 
     Board board[1];
