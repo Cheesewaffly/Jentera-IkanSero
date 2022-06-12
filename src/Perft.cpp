@@ -27,7 +27,7 @@ void perft(int depth, Board *position){ //individual perft testing
 void perftTest(int depth, Board *position){ //Main perft tester
     ASSERT(checkBoard(position)); //Checks if the board is in order
 
-    cout << endl << "Starting test to depth " << depth << endl;
+    std::cout << "\nStarting test to depth " << depth << "\n";
     leafNodes = 0; //resets the number of leaf nodes
 
     MoveList moveList[1]; //otherwise, make a movelist
@@ -46,9 +46,9 @@ void perftTest(int depth, Board *position){ //Main perft tester
         
         U64 oldLeafNodes = leafNodes - cummulativeLeafNodes; //The amoung of leafnodes for each root move
 
-        cout << "Move " << printMove(move) << ": " << oldLeafNodes << endl;
+        std::cout << "Move " << printMove(move) << ": " << oldLeafNodes << "\n";
     }
-    cout << "Complete: " << leafNodes << " nodes visited" << endl;
+    std::cout << "Complete: " << leafNodes << " nodes visited\n";
 
     return;
 }
@@ -56,14 +56,14 @@ void perftTest(int depth, Board *position){ //Main perft tester
 void parsePerft(Board *position, int depth){ //Automatically parse the file to test
     int positionNumber = 1; //Used to count how many position is checked
 
-    ifstream file("./res/perft.txt"); //Gets the file
+    std::ifstream file("./res/perft.txt"); //Gets the file
     if(file.is_open()){ //Opens the file
-        string line; //Gets the line in the file
+        std::string line; //Gets the line in the file
 
         while(getline(file, line)){ //While the file is open
             const char *perftString = line.c_str();
 
-            ostringstream FENString, depthNodesString[depth]; //Gets the FEN string from the file
+            std::ostringstream FENString, depthNodesString[depth]; //Gets the FEN string from the file
             U64 depthNodesInt[depth]; //Stores the leaf nodes in the form of a number
 
             while(*perftString != ';'){ //Gets the FEN string from the file
@@ -71,7 +71,7 @@ void parsePerft(Board *position, int depth){ //Automatically parse the file to t
                 perftString++;// moves on to the next character
             }
 
-            cout << endl << "Position " << positionNumber << ": " << FENString.str().c_str() << endl << endl;
+            std::cout << "\nPosition " << positionNumber << ": " << FENString.str().c_str() << "\n\n";
             parseFENString(FENString.str().c_str(), position); //Parses the fenstring to the board
             printBoard(position); //Prints the board
 
@@ -88,9 +88,9 @@ void parsePerft(Board *position, int depth){ //Automatically parse the file to t
                 perftTest(leafDepth + 1, position); //Executes the perft test on that depth
 
                 if(leafNodes == depthNodesInt[leafDepth]){ //Checks if the number of leaf nodes is the same o the file
-                    cout << "Perft test successful on depth " << leafDepth + 1 << endl;
+                    std::cout << "Perft test successful on depth " << leafDepth + 1 << "\n";
                 }else{
-                    cout << "SIKE, THATS THE WRONG NUMBER" << endl;
+                    std::cout << "SIKE, THATS THE WRONG NUMBER\n";
                     ASSERT(false);
                     system("pause");
                 }
@@ -98,7 +98,7 @@ void parsePerft(Board *position, int depth){ //Automatically parse the file to t
             positionNumber++; //Increments the number of positions checked
         }
         file.close(); //Closes the file
-        cout << endl << "PERFT TESTING FINISHED, ALL IS IN ORDER" << endl;
+        std::cout << "\nPERFT TESTING FINISHED, ALL IS IN ORDER\n";
     }
 
 }

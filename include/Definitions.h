@@ -2,13 +2,11 @@
 #include <cstdlib> // The C standard library for some useful functions
 #include <iostream>
 
-using namespace std;
-
 #define DEBUG
 #ifndef DEBUG
 #define ASSERT(error)
 #else
-#define ASSERT(error) if(!(error)){cout << #error << " - Failed in file " << __FILE__ << " at line " << __LINE__; exit(1);} // Error detection
+#define ASSERT(error) if(!(error)){std::cout << #error << " - Failed in file " << __FILE__ << " at line " << __LINE__; exit(1);} // Error detection
 #endif
 
 #define NAME "Jentera IkanSero v1.0" //This just replaces every NAME with "Jentera IkanSero v1.0" in the code

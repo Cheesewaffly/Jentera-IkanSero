@@ -38,13 +38,13 @@ char *printMove(const int move){ //Prints the move notation
 }
 
 void printMoveList(const MoveList *moveList){ //Prints out the move list
-    cout << "Move list: " << moveList->count << endl;
+    std::cout << "Move list: " << moveList->count << "\n";
 
     for(int index = 0; index < moveList->count; ++index){ //Loops through the move list
         int move = moveList->moves[index].move; //Gets the move
         int score = moveList->moves[index].postitionScore; //Gets the score of that move
 
-        cout << "Move: " << setw(2) << index + 1 << ". " << printMove(move) << ", (score: " << score << ")" << endl;
+        std::cout << "Move: " << std::setw(2) << index + 1 << ". " << printMove(move) << ", (score: " << score << ")\n";
     }
-    cout << "Move list total " << moveList->count << " moves" << endl;
+    std::cout << "Move list total " << moveList->count << " moves\n";
 }

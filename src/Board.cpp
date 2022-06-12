@@ -150,7 +150,7 @@ void parseFENString(const char *FENString, Board *position){ //To set up the boa
                 continue; //Continues the while loop
             
             default: //Everything else will come out as an error
-                cout << "FEN error" << endl;
+                std::cout << "FEN error\n";
         }
 
         for(int _ = 0; _ < count; _++){ //Actually putting the pieces on the board
@@ -236,27 +236,27 @@ void resetBoard(Board *position){ //A function to reset basically everything the
 }
 
 void printBoard(const Board *position){ //To print the board on the console
-    cout << "Game Board: " << endl;
+    std::cout << "Game Board: \n";
 
     for(int rank = eighthRank; rank >= firstRank; rank--){ //Loops through every rank on the board
-        cout << rank + 1 << " "; //Prints the rank number
+        std::cout << rank + 1 << " "; //Prints the rank number
         for(int file = aFile; file <= hFile; file++){ //Loops through every file on the board
             int square120Index = coordinatesTo120ArrayIndex(file, rank); //Gets the 120 array index
             int piece = position->boardPieces[square120Index]; //Gets the piece
-            cout << " " << pieceCharacter[piece] << " "; //Prints the piece
+            std::cout << " " << pieceCharacter[piece] << " "; //Prints the piece
         }
-        cout << endl;
+        std::cout << "\n";
     }
-    cout << "  "; //So it alligns
+    std::cout << "  "; //So it alligns
     for(int file = aFile; file <= hFile; file++){ //Loops through every file on the board
-        cout << " " << char(file + 'a') << " "; //Prints the file letter
+        std::cout << " " << char(file + 'a') << " "; //Prints the file letter
     }
-    cout << endl;
-    cout << "Side to play: " << char(sideCharacter[position->side]) << endl; //Prints which side is it to play
-    cout << "En passant square: " << dec << position->enPassantSquare << endl; //Prints the en passant square as a 120 square index
-    cout << char(position->castlePermission & whiteKingsideCastling ? 'K':'-'); //prints if white can castle kingside
-    cout << char(position->castlePermission & whiteQueensideCastling ? 'Q':'-'); //prints if white can castle queenside
-    cout << char(position->castlePermission & blackKingsideCastling ? 'k':'-'); //prints if black can castle kingside
-    cout << char(position->castlePermission & blackQueensideCastling ? 'q':'-') << endl; //prints if black can castle queenkingside
-    cout << "Position key: " << hex << uppercase << position->positionKey << dec << endl; //Prints the current position key
+    std::cout << "\n";
+    std::cout << "Side to play: \n" << char(sideCharacter[position->side]) << "\n"; //Prints which side is it to play
+    std::cout << "En passant square: \n" << std::dec << position->enPassantSquare << "\n"; //Prints the en passant square as a 120 square index
+    std::cout << char(position->castlePermission & whiteKingsideCastling ? 'K':'-'); //prints if white can castle kingside
+    std::cout << char(position->castlePermission & whiteQueensideCastling ? 'Q':'-'); //prints if white can castle queenside
+    std::cout << char(position->castlePermission & blackKingsideCastling ? 'k':'-'); //prints if black can castle kingside
+    std::cout << char(position->castlePermission & blackQueensideCastling ? 'q':'-') << "\n"; //prints if black can castle queenkingside
+    std::cout << "Position key: " << std::hex << std::uppercase << position->positionKey << std::dec << "\n"; //Prints the current position key
 }

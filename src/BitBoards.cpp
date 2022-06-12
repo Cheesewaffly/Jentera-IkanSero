@@ -19,10 +19,10 @@ void printBitBoard(U64 bitBoard){ //This is just to visualize the bitboards
             int square120Index = coordinatesTo120ArrayIndex(file, rank); //The index for the 120 array
             int square64Index = array120ToArray64[square120Index]; //The index for the 64 array
 
-            if((shiftedBit << square64Index) & bitBoard){cout << " p ";} //Prints an x if there is a pawn
-            else{cout << " . ";} //Prints a - if there is no pawn
+            if((shiftedBit << square64Index) & bitBoard){std::cout << " p ";} //Prints an x if there is a pawn
+            else{std::cout << " . ";} //Prints a - if there is no pawn
         }
-        cout << endl;
+        std::cout << "\n";
     }
-    cout << endl;
+    std::cout << "\n";
 }
