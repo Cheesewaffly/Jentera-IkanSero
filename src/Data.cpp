@@ -1,4 +1,4 @@
-#include "Definitions.h"
+#include "definitions.hpp"
 
 int bigPieces[13] = {false, false, true, true, true, true, true, false, true, true, true, true, true}; //Specifies all non-pawn pieces
 int majorPieces[13] = {false, false, false, false, true, true, true, false, false, false, true, true, true}; //Specifies the rook and the queen

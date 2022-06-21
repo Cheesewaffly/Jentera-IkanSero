@@ -1,4 +1,4 @@
-#include "Definitions.h"
+#include "definitions.hpp"
 
 int checkBoard(const Board *position){ //A function to crosscheck wether the information on the board is correct
     int checkPieceTypeNumber[13] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}; //Sets up to check the piece number

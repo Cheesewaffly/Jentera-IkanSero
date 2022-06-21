@@ -1,4 +1,4 @@
-#include "Definitions.h"
+#include "definitions.hpp"
 
 bool isSquareOnTheBoard(const int square){ //checks if the square is on the board
     return indexToFiles[square] == offBoardSquare ? false:true; //Returns true if that square is an off-board square

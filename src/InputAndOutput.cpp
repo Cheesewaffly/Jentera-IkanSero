@@ -1,4 +1,4 @@
-#include "Definitions.h"
+#include "definitions.hpp"
 #include <iomanip>
 
 char *printAlgebraicSquareNotation(const int square){ //Converts the square index to an algebraic notation

@@ -1,4 +1,4 @@
-#include "Definitions.h"
+#include "definitions.hpp"
 
 int popBit(U64 *bitBoardAddress){ //This basically pops out (removes) 1 bit from the board
     int leastSignificantBit = __builtin_ctzll(*bitBoardAddress); //gets the least significant bit on the bitboard

@@ -1,4 +1,4 @@
-#include "Definitions.h"
+#include "definitions.hpp"
 
 const int knightMoveDirection[8] = {-21, -19, -12, -8, 8, 12, 19, 21};  //The move direction of the different piece types
 const int bishopMoveDirection[4] = {-11, -9, 9, 11};                    //North = -10, south = 10, west = -1, east = 1

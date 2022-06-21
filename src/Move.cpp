@@ -1,4 +1,4 @@
-#include "Definitions.h"
+#include "definitions.hpp"
 
 #define hashPiece(piece, square) (position->positionKey ^= pieceHashKeys[piece][square]) //Hashes the piece in and out of the position key
 #define hashCastling (position->positionKey ^= castleHashKey[position->castlePermission]) //Hashes castling in and out of the position key

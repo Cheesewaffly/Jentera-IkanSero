@@ -1,4 +1,4 @@
-#include "Definitions.h"
+#include "definitions.hpp"
 
 U64 generatePositionKeys(const Board *position){ //Generates a unique key for each position
     U64 finalKey = 0; //The key itself starts as 0

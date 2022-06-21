@@ -1,4 +1,4 @@
-#include "Definitions.h"
+#include "definitions.hpp"
 
 #define move(origin, destination, capture, promotion, castleOrEnPassantOrDoubleMove) (origin | (destination << 7) | (capture << 14) | (promotion << 20) | castleOrEnPassantOrDoubleMove) //A move
 
