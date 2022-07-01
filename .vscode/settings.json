@@ -1,0 +1,8 @@
+{
+  "files.exclude": {
+    "*.md": true,
+  },
+  "code-runner.executorMap": {
+    "cpp": "make && ./bin/ISG++",
+  }
+}
