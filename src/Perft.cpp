@@ -15,7 +15,7 @@ void perft(int depth, Board *position){ //individual perft testing
     MoveList moveList[1]; //otherwise, make a movelist
     generateAllMoves(position, moveList); //generate all moves
 
-    for(int moveNumber = 0; moveNumber < moveList->count; ++moveNumber){ //Loop through all the moves in the movelist
+    for(int moveNumber{}; moveNumber < moveList->count; ++moveNumber){ //Loop through all the moves in the movelist
         if(!makeMove(position, moveList->moves[moveNumber].move)){ //ignore all illegal moves
             continue;
         }
@@ -33,7 +33,7 @@ void perftTest(int depth, Board *position){ //Main perft tester
     MoveList moveList[1]; //otherwise, make a movelist
     generateAllMoves(position, moveList); //generate all moves
 
-    for(int moveNumber = 0; moveNumber < moveList->count; ++moveNumber){ //Loop through all the moves in the movelist
+    for(int moveNumber{}; moveNumber < moveList->count; ++moveNumber){ //Loop through all the moves in the movelist
         int move = moveList->moves[moveNumber].move; //Gets the move from the move list
         if(!makeMove(position, moveList->moves[moveNumber].move)){ //ignore all illegal moves
             continue;
@@ -54,7 +54,7 @@ void perftTest(int depth, Board *position){ //Main perft tester
 }
 
 void parsePerft(Board *position, int depth){ //Automatically parse the file to test
-    int positionNumber = 1; //Used to count how many position is checked
+    int positionNumber{1}; //Used to count how many position is checked
 
     std::ifstream file("./res/perft.txt"); //Gets the file
     if(file.is_open()){ //Opens the file
@@ -75,7 +75,7 @@ void parsePerft(Board *position, int depth){ //Automatically parse the file to t
             parseFENString(FENString.str().c_str(), position); //Parses the fenstring to the board
             printBoard(position); //Prints the board
 
-            for(int leafDepth = 0; leafDepth < depth; leafDepth++){
+            for(int leafDepth{}; leafDepth < depth; leafDepth++){
                 perftString += 4; //Moves on to the leaf nodes number indicator
                 
                 while(*perftString != ';'){ //Gets the FEN string from the file

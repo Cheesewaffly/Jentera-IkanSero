@@ -103,17 +103,17 @@ static void addBlackPawnMove(const Board *position, const int originalSquare, co
 void generateAllMoves(const Board *position,  MoveList *moveList){ // Generates all possible moves
     ASSERT(checkBoard(position)); //Checks if the board is in order
 
-    moveList->count = 0;
+    moveList->count = 0; //counts how many moves in a position
 
     int piece = emptyPiece; //The default piece is an empty square
     int side = position->side; //the side playing
-    int square = 0; //The location of a piece
-    int targetSquare = 0; //the square the piece will go to
-    int direction = 0; //The direction of a move
-    int pieceIndex = 0; //To index a piece
+    int square{}; //The location of a piece
+    int targetSquare{}; //the square the piece will go to
+    int direction{}; //The direction of a move
+    int pieceIndex{}; //To index a piece
 
     if(side == white){ //if the side playing is white
-        for(int index = 0; index < position->pieceNumber[whitePawn]; index++){ //Loops through every white pawn on the board
+        for(int index{}; index < position->pieceNumber[whitePawn]; index++){ //Loops through every white pawn on the board
             square = position->pieceList[whitePawn][index]; //Takes the position of that white pawn
             ASSERT(isSquareOnTheBoard(square)); //Checks if square is valid
 
@@ -161,7 +161,7 @@ void generateAllMoves(const Board *position,  MoveList *moveList){ // Generates 
 
         }
     }else{ //if the side playing is black
-        for(int index = 0; index < position->pieceNumber[blackPawn]; index++){ //Loops through every black pawn on the board
+        for(int index{}; index < position->pieceNumber[blackPawn]; index++){ //Loops through every black pawn on the board
             square = position->pieceList[blackPawn][index]; //Takes the position of that black pawn
             ASSERT(isSquareOnTheBoard(square)); //Checks if square is valid
 
@@ -215,11 +215,11 @@ void generateAllMoves(const Board *position,  MoveList *moveList){ // Generates 
     while(piece){ //While the value of piece is not 0
         ASSERT(isPieceValid(piece)); //Checks if the piece is valid
 
-        for(int index = 0; index < position->pieceNumber[piece]; ++index){ //Loops through every sliding piece on the board
+        for(int index{}; index < position->pieceNumber[piece]; ++index){ //Loops through every sliding piece on the board
             square = position->pieceList[piece][index]; //Takes the position of that piece
             ASSERT(isSquareOnTheBoard(square)); //Checks if square is valid
 
-            for(int directionIndex = 0; directionIndex < numberOfDirections[piece]; ++directionIndex){ //Loops through all the directrion the piece can go to
+            for(int directionIndex{}; directionIndex < numberOfDirections[piece]; ++directionIndex){ //Loops through all the directrion the piece can go to
                 direction = pieceDirections[piece][directionIndex]; //Gets the direction 
                 targetSquare = square + direction; //Sets the destination square
                 
@@ -243,11 +243,11 @@ void generateAllMoves(const Board *position,  MoveList *moveList){ // Generates 
     while(piece){ //While the value of piece is not 0
         ASSERT(isPieceValid(piece)); //Checks if the piece is valid
 
-        for(int index = 0; index < position->pieceNumber[piece]; ++index){ //Loops through every jumping piece on the board
+        for(int index{}; index < position->pieceNumber[piece]; ++index){ //Loops through every jumping piece on the board
             square = position->pieceList[piece][index]; //Takes the position of that piece
             ASSERT(isSquareOnTheBoard(square)); //Checks if square is valid
 
-            for(int directionIndex = 0; directionIndex < numberOfDirections[piece]; ++directionIndex){ //Loops through all the directrion the piece can go to
+            for(int directionIndex{}; directionIndex < numberOfDirections[piece]; ++directionIndex){ //Loops through all the directrion the piece can go to
                 direction = pieceDirections[piece][directionIndex]; //Gets the direction 
                 targetSquare = square + direction; //Sets the destination square
                 

@@ -2,7 +2,7 @@
 #include <cstdlib> // The C standard library for some useful functions
 #include <iostream>
 
-#define DEBUG
+// #define DEBUG
 #ifndef DEBUG
 #define ASSERT(error)
 #else

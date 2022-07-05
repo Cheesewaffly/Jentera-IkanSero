@@ -73,7 +73,7 @@ int checkBoard(const Board *position){ //A function to crosscheck wether the inf
 }
 
 void updateMaterialList(Board *position){ //counts the number of pieces and their classifications
-    for(int index = 0; index < boardSquareNumber; ++index){ //Loops through all of the squares in the 120 array board
+    for(int index{}; index < boardSquareNumber; ++index){ //Loops through all of the squares in the 120 array board
         int square120Array = index; //Sets a 120 array index
         int piece = position->boardPieces[index]; //Takes the piece on that square
 
@@ -153,7 +153,7 @@ void parseFENString(const char *FENString, Board *position){ //To set up the boa
                 std::cout << "FEN error\n";
         }
 
-        for(int _ = 0; _ < count; _++){ //Actually putting the pieces on the board
+        for(int _{}; _ < count; _++){ //Actually putting the pieces on the board
             int square64Index = rank * 8 + file; //Gets the 64 array index
             int square120Index = array64ToArray120[square64Index]; //Gets the 120 array index
             if(piece != emptyPiece){ //Checks if the square is empty
@@ -170,7 +170,7 @@ void parseFENString(const char *FENString, Board *position){ //To set up the boa
     position->side = (*FENString == 'w') ? white:black; //Checks if that character is white to play or else its black to play
     FENString += 2; //Moves on to the castling permission indicator characters
 
-    for(int _ = 0; _ < 4; _++){ //Loops through the castling permission indicator which consists of 1-4 characters
+    for(int _{}; _ < 4; _++){ //Loops through the castling permission indicator which consists of 1-4 characters
         if(*FENString == ' '){break;} //Breaks the loop if it hits a blank space
 
         switch(*FENString){ //if its not a blank space then it will combine the permissions together (using the OR operator)
@@ -202,26 +202,26 @@ void parseFENString(const char *FENString, Board *position){ //To set up the boa
 }
 
 void resetBoard(Board *position){ //A function to reset basically everything the board
-    for(int index = 0; index < boardSquareNumber; ++index){ //Loops through all the squares on the 120 array board
+    for(int index{}; index < boardSquareNumber; ++index){ //Loops through all the squares on the 120 array board
         position->boardPieces[index] = offBoardSquare; //Sets all these squares to an off-board square, which is basically the same as an empty square i don't know why we're differentiating
     }
 
-    for(int index = 0; index < 64; ++index){ //Loops through all the squares on the 64 array board
+    for(int index{}; index < 64; ++index){ //Loops through all the squares on the 64 array board
         position->boardPieces[array64ToArray120[index]] = emptyPiece; //Sets all these squares to an empty square
     }
 
-    for(int index = 0; index < 2; ++index){ //Loops through all the squares on the board for the classifications of the pieces
+    for(int index{}; index < 2; ++index){ //Loops through all the squares on the board for the classifications of the pieces
         position->bigPiecesNumber[index] = 0; //Resets the number of big pieces on the board
         position->minorPiecesNumber[index] = 0; //Resets the number of minor pieces on the board
         position->majorPiecesNumber[index] = 0; //Resets the number of major pieces on the board
         position->materialScore[index] = 0; //Resets the material score on the board
     }
 
-    for(int index = 0; index < 3; ++index){ //Loops through all the squares on the board for pawn bit boards
+    for(int index{}; index < 3; ++index){ //Loops through all the squares on the board for pawn bit boards
         position->pawnBitBoards[index] = 0ULL; //Resets the number of pawns on the board;
     }
 
-    for(int index = 0; index < 13; ++index){ //Loops through all the squares on the board for the number of the types of pieces
+    for(int index{}; index < 13; ++index){ //Loops through all the squares on the board for the number of the types of pieces
         position->pieceNumber[index] = 0; //Resets the number of pieces on the board
     }
 
@@ -236,7 +236,7 @@ void resetBoard(Board *position){ //A function to reset basically everything the
 }
 
 void printBoard(const Board *position){ //To print the board on the console
-    std::cout << "Game Board: \n";
+    std::cout << "\nGame Board: \n";
 
     for(int rank = eighthRank; rank >= firstRank; rank--){ //Loops through every rank on the board
         std::cout << rank + 1 << " "; //Prints the rank number

@@ -10,7 +10,7 @@ const int castlingPermissionsArray[120] = {     //Used to change the castling pe
     15, 15, 15, 15, 15, 15, 15, 15, 15, 15,     //If the H1 rook moves the castling permission would be 1110 (14)
     15, 15, 15, 15, 15, 15, 15, 15, 15, 15,     //If the A1 rook moves the castling permission would be 1101 (13)
     15, 13, 15, 15, 15, 12, 15, 15, 14, 15,     //If the white king moves the castling permission would be 1100 (12)
-    15, 15, 15, 15, 15, 15, 15, 15, 15, 15,     //If the H* rook moves the castling permission would be 1011 (11)
+    15, 15, 15, 15, 15, 15, 15, 15, 15, 15,     //If the H8 rook moves the castling permission would be 1011 (11)
     15, 15, 15, 15, 15, 15, 15, 15, 15, 15,     //If the A8 rook moves the castling permission would be 0111 (7)
     15, 15, 15, 15, 15, 15, 15, 15, 15, 15,     //If the black king moves the castling permission would be 0011 (3)
     15, 15, 15, 15, 15, 15, 15, 15, 15, 15,     //else the castling permission is 1111 (15)
@@ -47,7 +47,7 @@ static void clearPiece(const int square, Board *position){ //Clears a piece from
         clearBit(position->pawnBitBoards[both], array120ToArray64[square]); //Clears the pawn bitboard
     }
 
-    for(int index = 0; index < position->pieceNumber[piece]; ++index){ //Loops through all of that piece's type on the board
+    for(int index{}; index < position->pieceNumber[piece]; ++index){ //Loops through all of that piece's type on the board
         if(position->pieceList[piece][index] == square){ //if its actually the piece we're looking for
             pieceIndex = index; //sets that piece's index to the piece index
             break;
@@ -110,7 +110,7 @@ static void movePiece(int squareOfOrigin, int targetSquare, Board *position){ //
         setBit(position->pawnBitBoards[both], array120ToArray64[targetSquare]); //adds a bit to the pawn bitboard
     }
 
-    for(int index = 0; index < position->pieceNumber[piece]; ++index){ //Loops through all of that piece's type on the board
+    for(int index{}; index < position->pieceNumber[piece]; ++index){ //Loops through all of that piece's type on the board
         if(position->pieceList[piece][index] == squareOfOrigin){ //if its actually the piece we're looking for
             position->pieceList[piece][index] = targetSquare; //changes the location of the piece
 
@@ -140,9 +140,9 @@ bool makeMove(Board *position, int move){ //To make the move
 
     if(move & enPassantMove){ //If the move is an en passant move
         if(side == white){ //If white to move
-            clearPiece(targetSquare-10, position); //captures a black pawn
+            clearPiece(targetSquare - 10, position); //captures a black pawn
         }else{ //If black to move
-            clearPiece(targetSquare+10, position); //captures a white pawn
+            clearPiece(targetSquare + 10, position); //captures a white pawn
         }
     }
     
@@ -261,9 +261,9 @@ void undoMove(Board *position){ //To undo the move
 
     if(move & enPassantMove){ //If the move is an en passant move
         if(position->side == white){ //If white to move
-            addPiece(targetSquare-10, position, blackPawn); //Readds a black pawn
+            addPiece(targetSquare - 10, position, blackPawn); //Readds a black pawn
         }else{ //If black to move
-            addPiece(targetSquare+10, position, whitePawn); //Readds a white pawn
+            addPiece(targetSquare + 10, position, whitePawn); //Readds a white pawn
         }
     }
     

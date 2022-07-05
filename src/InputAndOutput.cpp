@@ -37,10 +37,34 @@ char *printMove(const int move){ //Prints the move notation
     return moveNotation; //Returns the move notation
 }
 
+bool parseMove(char *characterPointer, Board *position){ //Takes a move from the user
+    if(characterPointer[0] < 'a' || characterPointer[0] > 'h'){return false;} //Checks if the original file is valid
+    if(characterPointer[1] < '1' || characterPointer[1] > '8'){return false;} //Checks if the original rank is valid
+    if(characterPointer[2] < 'a' || characterPointer[2] > 'h'){return false;} //Checks if the destination file is valid
+    if(characterPointer[3] < '1' || characterPointer[3] > '8'){return false;} //Checks if the destination rank is valid
+
+    int squareOfOrigin = coordinatesTo120ArrayIndex(characterPointer[0] - '1', characterPointer[1] - 'a'); //Converts the input to a 120 array index
+    int destinationSquare = coordinatesTo120ArrayIndex(characterPointer[2] - '1', characterPointer[3] - 'a'); //Converts the input to a 120 array index
+
+    std::cout << "Move: " << characterPointer << " from: " << squareOfOrigin << " to: " << destinationSquare << "\n";
+
+    ASSERT(isSquareOnTheBoard(squareOfOrigin) && isSquareOnTheBoard(destinationSquare)) //Validates the squares
+
+    MoveList moveList[1]; //Creates a Movelist
+    generateAllMoves(position, moveList); //Generates all possible moves
+
+    int move{}; //The move that is going to be returned
+    int promotedPiece = emptyPiece; //Special case for promotions
+
+    for(int moveNumber{}; moveNumber < moveList->count; ++moveNumber){
+        
+    }
+}
+
 void printMoveList(const MoveList *moveList){ //Prints out the move list
     std::cout << "Move list: " << moveList->count << "\n";
 
-    for(int index = 0; index < moveList->count; ++index){ //Loops through the move list
+    for(int index{}; index < moveList->count; ++index){ //Loops through the move list
         int move = moveList->moves[index].move; //Gets the move
         int score = moveList->moves[index].postitionScore; //Gets the score of that move
 

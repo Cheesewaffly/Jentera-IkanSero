@@ -1,10 +1,10 @@
 #include "definitions.hpp"
 
 U64 generatePositionKeys(const Board *position){ //Generates a unique key for each position
-    U64 finalKey = 0; //The key itself starts as 0
+    U64 finalKey{}; //The key itself starts as 0
     int piece = emptyPiece; //Sets the default piece value
 
-    for(int square120Index = 0; square120Index < boardSquareNumber; ++square120Index){ //Loops through all the squares on the 120 array board
+    for(int square120Index{}; square120Index < boardSquareNumber; ++square120Index){ //Loops through all the squares on the 120 array board
         piece = position->boardPieces[square120Index]; //The variable piece is equal to whatever the value the current square is
         if(piece != emptySquare && piece != emptyPiece && piece != offBoardSquare){ //Checks wether the square is a border square or an empty square or an off-board square
             ASSERT(piece >= whitePawn && piece <= blackKing); //Makes sure that the piece is in the range of a white pawn to a black king as defined
