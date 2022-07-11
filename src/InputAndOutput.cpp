@@ -2,7 +2,7 @@
 #include <iomanip>
 
 char *printAlgebraicSquareNotation(const int square){ //Converts the square index to an algebraic notation
-    static char squareNotation[3]; //needs 3 characters e.g e8q (that q is a queen defining a pawn promotion)
+    static char squareNotation[3]; //needs 3 characters including the enter key
 
     int file = indexToFiles[square]; //Gets the file from the board
     int rank = indexToRanks[square]; //Gets the rank from the board
@@ -13,7 +13,7 @@ char *printAlgebraicSquareNotation(const int square){ //Converts the square inde
 }
 
 char *printMove(const int move){ //Prints the move notation
-    static char moveNotation[6]; //needs 6 characters e.g a1re8q (that q is a queen and r is a rook defining a pawn promotion)
+    static char moveNotation[6]; //needs 6 characters including the enter key
 
     int originalFile = indexToFiles[originalSquare(move)]; //Gets the original file from the board
     int originalRank = indexToRanks[originalSquare(move)]; //Gets the original rank from the board
@@ -37,16 +37,14 @@ char *printMove(const int move){ //Prints the move notation
     return moveNotation; //Returns the move notation
 }
 
-bool parseMove(char *characterPointer, Board *position){ //Takes a move from the user
+int parseMove(char *characterPointer, Board *position){ //Takes a move from the user
     if(characterPointer[0] < 'a' || characterPointer[0] > 'h'){return false;} //Checks if the original file is valid
     if(characterPointer[1] < '1' || characterPointer[1] > '8'){return false;} //Checks if the original rank is valid
     if(characterPointer[2] < 'a' || characterPointer[2] > 'h'){return false;} //Checks if the destination file is valid
     if(characterPointer[3] < '1' || characterPointer[3] > '8'){return false;} //Checks if the destination rank is valid
 
-    int squareOfOrigin = coordinatesTo120ArrayIndex(characterPointer[0] - '1', characterPointer[1] - 'a'); //Converts the input to a 120 array index
-    int destinationSquare = coordinatesTo120ArrayIndex(characterPointer[2] - '1', characterPointer[3] - 'a'); //Converts the input to a 120 array index
-
-    std::cout << "Move: " << characterPointer << " from: " << squareOfOrigin << " to: " << destinationSquare << "\n";
+    int squareOfOrigin = coordinatesTo120ArrayIndex(characterPointer[0] - 'a', characterPointer[1] - '1'); //Converts the input to a 120 array index
+    int destinationSquare = coordinatesTo120ArrayIndex(characterPointer[2] - 'a', characterPointer[3] - '1'); //Converts the input to a 120 array index
 
     ASSERT(isSquareOnTheBoard(squareOfOrigin) && isSquareOnTheBoard(destinationSquare)) //Validates the squares
 
@@ -56,9 +54,21 @@ bool parseMove(char *characterPointer, Board *position){ //Takes a move from the
     int move{}; //The move that is going to be returned
     int promotedPiece = emptyPiece; //Special case for promotions
 
-    for(int moveNumber{}; moveNumber < moveList->count; ++moveNumber){
-        
+    for(int moveNumber{}; moveNumber < moveList->count; ++moveNumber){ //Loops through all the moves in the movelist
+        move = moveList->moves[moveNumber].move; //Gets that specific move
+        if(originalSquare(move) == squareOfOrigin && destinationSquare(move) == destinationSquare){ //If that move is the same as the user input
+            promotedPiece = piecePromotedTo(move); //Gets the promoted piece from the move
+            if(promotedPiece){ //If the promoted piece is not empty
+                if(isItARookOrQueen[promotedPiece] && isItABishopOrQueen[promotedPiece] && characterPointer[4] == 'q'){return move;} //Promotes to a queen
+                else if(isItARookOrQueen[promotedPiece] && !isItABishopOrQueen[promotedPiece] && characterPointer[4] == 'r'){return move;} //Promotes to a rook
+                else if(!isItARookOrQueen[promotedPiece] && isItABishopOrQueen[promotedPiece] && characterPointer[4] == 'b'){return move;} //Promotes to a bishop
+                else if(isItAKnight[promotedPiece] && characterPointer[4] == 'n'){return move;} //Promotes to a knight
+                continue;
+            }
+            return move; //return non promotion move
+        }
     }
+    return false; //if the move is invalid
 }
 
 void printMoveList(const MoveList *moveList){ //Prints out the move list

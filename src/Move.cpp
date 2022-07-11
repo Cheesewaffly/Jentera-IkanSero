@@ -233,7 +233,7 @@ bool makeMove(Board *position, int move){ //To make the move
     return true;
 } 
 
-void undoMove(Board *position){ //To undo the move
+void undoMove(Board *position){ //To undo the previous move
     ASSERT(checkBoard(position)); //Checks if the board is in order
 
     position->historyPly--; //Decrements the ply history

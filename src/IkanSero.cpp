@@ -6,12 +6,22 @@ int main(){
     Board board[1];
     MoveList moveList[1];
 
-    parseFENString("r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - ", board);
+    parseFENString("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1", board);
 
-    for(int _{1}; _ < 14; ++_){
+    char input[6];
+    int move{};
+
+    while(true){
         printBoard(board);
-        perftTest(_, board);
+        std::cout << "Your move: ";
+        std::cin >> input;
+
+        if(input[0] == 'q'){break;}
+        else if(input[0] == 't'){undoMove(board);}
+        else{
+            move = parseMove(input, board);
+            if(move){makeMove(board, move);}
+            else{std::cout << "Move is invalid and/or impossible\n";}
+        }
     }
-    
-    // parsePerft(board, 6);
 }

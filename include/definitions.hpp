@@ -13,7 +13,7 @@
 #define boardSquareNumber 120 //We are using a 12x10 board representation
 #define maxGameMoves 2048 //The maximum number of moves in a game, to save memory
 #define maxPositionMoves 256 //The maximum number of moves in a given position
-#define coordinatesTo120ArrayIndex(files, ranks) ((21 + files) + (10 * ranks)) //Converts the coordinates of a square to the index of the 120 array
+#define coordinatesTo120ArrayIndex(files, ranks) ((21 + (files)) + (10 * (ranks))) //Converts the coordinates of a square to the index of the 120 array
 #define clearBit(bitBoard, index) ((bitBoard) &= clearBitBoardMask[index]) //Clears a bit on a bitboard
 #define setBit(bitBoard, index) ((bitBoard) |= setBitBoardMask[index]) //Sets a bit on a bitboard
 #define originalSquare(square) (square & 0x7F) //Used to make a move, the origin square is represented by the first 7 bits of a 28 bit number   (0000 0000 0000 0000 0000 0111 1111)
@@ -97,6 +97,7 @@ extern void printMoveList(const MoveList *moveList); //Prints out the move list
 extern void undoMove(Board *position); //To undo the move
 extern void perftTest(int depth, Board *position); //Main perft tester
 extern void parsePerft(Board *position, int depth); //Automatically parse the file to test
+extern void searchPosition(Board *position); //Searches the position for moves
 
 extern int array120ToArray64[boardSquareNumber]; //To convert the 12x10 index to a 8x8 index (BAD PRACTICE TO DEFINE GLOBAL VARIABLES!!)
 extern int array64ToArray120[64]; //To convert the 8x8 index to a 12x10 index
@@ -115,7 +116,7 @@ extern int isItAKnight[13]; //A silly way to check if a piece is a knight
 extern int isItAKing[13]; //A silly way to check if a piece is a king
 extern int isItABishopOrQueen[13]; //A silly way to check if a piece is a bishop or queen
 extern int isItARookOrQueen[13]; //A silly way to check if a piece is a rook or queen
-extern int isItASlidingPiece[13]; //To check if a piece slide
+extern int parseMove(char *characterPointer, Board *position); //parses a move from the user
 
 extern U64 setBitBoardMask[64]; // The set bitboard mask array
 extern U64 clearBitBoardMask[64]; // The clear bitboard mask array

@@ -10,7 +10,6 @@ int isItAKnight[13] = {false, false, true, false, false, false, false, false, tr
 int isItAKing[13] = {false, false, false, false, false, false, true, false, false, false, false, false, true}; //A silly way to check if a piece is a king
 int isItABishopOrQueen[13] = {false, false, false, true, false, true, false, false, false, true, false, true, false}; //A silly way to check if a piece is a bishop or queen
 int isItARookOrQueen[13] = {false, false, false, false, true, true, false, false, false, false, true, true, false}; //A silly way to check if a piece is a rook or queen
-int isItASlidingPiece[13] = {false, false, false, true, true, true, false, false, false, true, true, true, false}; //To check if a piece slide
 
 char pieceCharacter[] = ".PNBRQKpnbrqk"; //the piece symbols
 char sideCharacter[] = "wb-"; //the side to play symbols

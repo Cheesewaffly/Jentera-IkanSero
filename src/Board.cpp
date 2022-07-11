@@ -252,8 +252,10 @@ void printBoard(const Board *position){ //To print the board on the console
         std::cout << " " << char(file + 'a') << " "; //Prints the file letter
     }
     std::cout << "\n";
-    std::cout << "Side to play: \n" << char(sideCharacter[position->side]) << "\n"; //Prints which side is it to play
-    std::cout << "En passant square: \n" << std::dec << position->enPassantSquare << "\n"; //Prints the en passant square as a 120 square index
+    std::cout << "Side to play: " << char(sideCharacter[position->side]) << "\n"; //Prints which side is it to play
+    if(position->enPassantSquare != 99){ //if theres an en passant square
+        std::cout << "En passant square: " << std::dec << printAlgebraicSquareNotation(position->enPassantSquare) << "\n"; //Prints the en passant square as a 120 square index
+    }
     std::cout << char(position->castlePermission & whiteKingsideCastling ? 'K':'-'); //prints if white can castle kingside
     std::cout << char(position->castlePermission & whiteQueensideCastling ? 'Q':'-'); //prints if white can castle queenside
     std::cout << char(position->castlePermission & blackKingsideCastling ? 'k':'-'); //prints if black can castle kingside
