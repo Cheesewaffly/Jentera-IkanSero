@@ -11,7 +11,7 @@
     "bit": "cpp",
     "*.tcc": "cpp",
     "cctype": "cpp",
-    "clocale": "cpp", //sa
+    "clocale": "cpp",
     "cmath": "cpp",
     "compare": "cpp",
     "concepts": "cpp",
