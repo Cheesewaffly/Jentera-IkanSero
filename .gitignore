@@ -2,3 +2,4 @@ bin/*
 *.dll
 lib/*
 .vscode/*
+src/TODO.txt
