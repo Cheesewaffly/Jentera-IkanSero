@@ -3,3 +3,4 @@ bin/*
 lib/*
 .vscode/*
 src/TODO.txt
+.DS_Store
