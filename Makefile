@@ -1,6 +1,6 @@
 CCG = g++
 CCCLANG = clang++
-CFLAGS = -std=c++2b -Wno-parentheses -Iinclude/
+CFLAGS = -std=c++2b -Wno-parentheses -Iinclude/ -Ofast
 
 SOURCES := $(wildcard src/*.cpp)
 OBJECTS := $(patsubst src/%.cpp, bin/obj/%.o, $(SOURCES))
