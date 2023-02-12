@@ -8,7 +8,7 @@ int indexToFiles[boardSquareNumber]; //Converts the index to a file letter
 int indexToRanks[boardSquareNumber]; //Converts the index to a rank number
 
 U64 setBitBoardMask[64]; // The set bitboard mask array
-U64 clearBitBoardMask[64]; // The clear bitboard mask array  
+U64 clearBitBoardMask[64]; // The clear bitboard mask array
 U64 pieceHashKeys[13][boardSquareNumber]; //Hashes (stores) the pieces and their positions
 U64 sideHashKey; // Hashes which side is it to move
 U64 castleHashKey[16]; // Hashes the current castling permissions
@@ -37,7 +37,7 @@ void initializeHashKeys(){
             pieceHashKeys[index][secondIndex] = random64BitNumber; // Assigns a random 64 bit number for the piece hash key
         }
     }
-    
+
     sideHashKey = random64BitNumber; //Assigns a 64 bit number to the side hash key
 
     for(int index{}; index < 16; ++index){ //Loops for the index of the casle hash key

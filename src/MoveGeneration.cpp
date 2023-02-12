@@ -59,7 +59,7 @@ static void addWhitePawnCaptureMove(const Board *position, const int originalSqu
 static void addWhitePawnMove(const Board *position, const int originalSquare, const int destinationSquare, MoveList *moveList){ //Checks if a white pawn is promoting
     ASSERT(isSquareOnTheBoard(originalSquare)); //Checks if the original square is valid
     ASSERT(isSquareOnTheBoard(destinationSquare)); //Checks if the destination square is valid
-    
+
     if(indexToRanks[originalSquare] == seventhRank){ //If the pawn if from the seventh rank
         addCaptureMove(position, move(originalSquare, destinationSquare, emptyPiece, whiteQueen, 0), moveList); //Promotes to a white queen
         addCaptureMove(position, move(originalSquare, destinationSquare, emptyPiece, whiteRook, 0), moveList); //Promotes to a white rook
@@ -220,9 +220,9 @@ void generateAllMoves(const Board *position,  MoveList *moveList){ // Generates 
             ASSERT(isSquareOnTheBoard(square)); //Checks if square is valid
 
             for(int directionIndex{}; directionIndex < numberOfDirections[piece]; ++directionIndex){ //Loops through all the directrion the piece can go to
-                direction = pieceDirections[piece][directionIndex]; //Gets the direction 
+                direction = pieceDirections[piece][directionIndex]; //Gets the direction
                 targetSquare = square + direction; //Sets the destination square
-                
+
                 while(indexToFiles[targetSquare] != offBoardSquare){ // keep going while the destination square still on the board
                     if(position->boardPieces[targetSquare] != emptyPiece){ //Checks if theres a piece on that destination square
                         if(pieceColour[position->boardPieces[targetSquare]] == side ^ 1){ //if the piece on the destination square a different color from the piece moving
@@ -248,9 +248,9 @@ void generateAllMoves(const Board *position,  MoveList *moveList){ // Generates 
             ASSERT(isSquareOnTheBoard(square)); //Checks if square is valid
 
             for(int directionIndex{}; directionIndex < numberOfDirections[piece]; ++directionIndex){ //Loops through all the directrion the piece can go to
-                direction = pieceDirections[piece][directionIndex]; //Gets the direction 
+                direction = pieceDirections[piece][directionIndex]; //Gets the direction
                 targetSquare = square + direction; //Sets the destination square
-                
+
                 if(indexToFiles[targetSquare] == offBoardSquare){ //Checks if the square is off-board
                     continue;
                 }
@@ -266,5 +266,5 @@ void generateAllMoves(const Board *position,  MoveList *moveList){ // Generates 
         }
         piece = jumpingPiecesLoop[pieceIndex++]; //Go to the next piece
     }
-    
+
 }

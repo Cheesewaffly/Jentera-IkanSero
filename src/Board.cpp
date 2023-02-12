@@ -7,7 +7,7 @@ int checkBoard(const Board *position){ //A function to crosscheck wether the inf
     int checkMinorPiecesnumber[2] = {0, 0}; //Sets up to check the minor piece number
     int checkMaterialScore[2] = {0, 0};//Sets up to check the material value on the board
     int checkSquare120Array, checkSquare64Array, colour, checkPieces, checkPieceNumber, checkPawnCount; //To check between the arrays, check pieces and piece numbers alongside their colour
-    
+
     U64 checkPawnBitBoards[3] = {0ULL, 0ULL, 0ULL}; //Sets up to check the pawn bitboards
 
     checkPawnBitBoards[white] = position->pawnBitBoards[white]; //Sets up to check the white pawn bitboards
@@ -141,14 +141,14 @@ void parseFENString(const char *FENString, Board *position){ //To set up the boa
                 piece = emptyPiece; //Sets that number of squares into empty squares
                 count = *FENString - '0'; //substracts the ASCII value so that it returns an int
                 break;
-            
+
             case '/': //Sets up the next rank
             case ' ': //End of the pieces initialization
                 rank--; //Move on to the next rank
                 file = aFile; //Starts from the first file
                 FENString++; //move along to the next character
                 continue; //Continues the while loop
-            
+
             default: //Everything else will come out as an error
                 std::cout << "FEN error\n";
         }

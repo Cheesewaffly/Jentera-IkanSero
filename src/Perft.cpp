@@ -40,10 +40,10 @@ void perftTest(int depth, Board *position){ //Main perft tester
         }
 
         U64 cummulativeLeafNodes = leafNodes; //To calculate the old leaf nodes
-        
+
         perft(depth - 1, position); //Iterate this function until depth = 0
         undoMove(position); //Undoes the move
-        
+
         U64 oldLeafNodes = leafNodes - cummulativeLeafNodes; //The amoung of leafnodes for each root move
 
         std::cout << "Move " << printMove(move) << ": " << oldLeafNodes << "\n";
@@ -77,12 +77,12 @@ void parsePerft(Board *position, int depth){ //Automatically parse the file to t
 
             for(int leafDepth{}; leafDepth < depth; leafDepth++){
                 perftString += 4; //Moves on to the leaf nodes number indicator
-                
+
                 while(*perftString != ';'){ //Gets the FEN string from the file
                     depthNodesString[leafDepth] << *perftString; //Gets the real leaf nodes to a atring
                     perftString++; //Moves on to the next character
                 }
-                
+
                 depthNodesInt[leafDepth] = stoull(depthNodesString[leafDepth].str()); //truns the string into a number
 
                 perftTest(leafDepth + 1, position); //Executes the perft test on that depth

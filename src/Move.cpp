@@ -89,7 +89,7 @@ static void addPiece(const int square, Board *position, const int piece){ //Adds
 static void movePiece(int squareOfOrigin, int targetSquare, Board *position){ //Moves the piece on the board
     ASSERT(isSquareOnTheBoard(squareOfOrigin)); //Checks if the original square is valid
     ASSERT(isSquareOnTheBoard(targetSquare)); //Checks if the destination square is valid
-    
+
     int piece = position->boardPieces[squareOfOrigin]; //Gets the piece on that square
     int colour = pieceColour[piece]; //Gets the colour of the piece
 
@@ -145,7 +145,7 @@ bool makeMove(Board *position, int move){ //To make the move
             clearPiece(targetSquare + 10, position); //captures a white pawn
         }
     }
-    
+
     else if(move & castlingMove){ //if the move is a castling move
         switch(targetSquare){
             case C1: //if the king moves to C1
@@ -167,20 +167,20 @@ bool makeMove(Board *position, int move){ //To make the move
     }
 
     if(position->enPassantSquare != emptySquare){hashEnPassant;} //hashes the en passant square out of the position key (to be replaced, or be set to empty square)
-    
+
     hashCastling; //hashes out the castling permissions out of the position key
 
     position->history[position->historyPly].move = move; //stores the move
     position->history[position->historyPly].fiftyMoveRule = position->fiftyMoveRule; //stores the fifty move rule
     position->history[position->historyPly].enPassantSquare = position->enPassantSquare; //stores the en passant square
     position->history[position->historyPly].castlePermission = position->castlePermission; //stores the castle permissions
-    
+
     position->castlePermission &= castlingPermissionsArray[squareOfOrigin]; //updates the castling permission
     position->castlePermission &= castlingPermissionsArray[targetSquare]; //updates the castling permission
     position->enPassantSquare = emptySquare;
 
     hashCastling;  //hashes in the updated castling permissions in the position key
-    
+
     int capturedPiece = pieceCaptured(move); //Gets the piece captured
     position->fiftyMoveRule++; //increments the fifty move rule
 
@@ -231,7 +231,7 @@ bool makeMove(Board *position, int move){ //To make the move
     }
 
     return true;
-} 
+}
 
 void undoMove(Board *position){ //To undo the previous move
     ASSERT(checkBoard(position)); //Checks if the board is in order
@@ -248,7 +248,7 @@ void undoMove(Board *position){ //To undo the previous move
 
     if(position->enPassantSquare != emptySquare){hashEnPassant;} //hashes the en passant square out of the position key (to be replaced, or be set to empty square)
     hashCastling; //hashes out the castling permissions out of the position key
-    
+
     position->fiftyMoveRule = position->history[position->historyPly].fiftyMoveRule; //stores the fifty move rule
     position->enPassantSquare = position->history[position->historyPly].enPassantSquare; //stores the en passant square
     position->castlePermission = position->history[position->historyPly].castlePermission; //stores the castle permissions
@@ -266,7 +266,7 @@ void undoMove(Board *position){ //To undo the previous move
             addPiece(targetSquare + 10, position, whitePawn); //Readds a white pawn
         }
     }
-    
+
     else if(move & castlingMove){ //if the move is a castling move
         switch(targetSquare){
             case C1: //if the king moves to C1
