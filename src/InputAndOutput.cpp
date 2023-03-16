@@ -7,7 +7,7 @@ char *printAlgebraicSquareNotation(const int square){ //Converts the square inde
     int file = indexToFiles[square]; //Gets the file from the board
     int rank = indexToRanks[square]; //Gets the rank from the board
 
-    sprintf(squareNotation, "%c%c", ('a' + file), ('1' + rank)); //Generates the algebraic notation
+    snprintf(squareNotation, 3, "%c%c", ('a' + file), ('1' + rank)); //Generates the algebraic notation
 
     return squareNotation; //Returns the algebraic notation
 }
@@ -30,9 +30,9 @@ char *printMove(const int move){ //Prints the move notation
         } else if(!isItARookOrQueen[promotion] && isItABishopOrQueen[promotion]){ //Checks if the promoted piece is a rook
             promotionCharacter = 'b';
         }
-        sprintf(moveNotation, "%c%c%c%c%c", ('a' + originalFile), ('1' + originalRank), ('a' + destinationFile), ('1' + destinationRank), promotionCharacter); //Builds the move string
+        snprintf(moveNotation, 6, "%c%c%c%c%c", ('a' + originalFile), ('1' + originalRank), ('a' + destinationFile), ('1' + destinationRank), promotionCharacter); //Builds the move string
     } else {
-        sprintf(moveNotation, "%c%c%c%c", ('a' + originalFile), ('1' + originalRank), ('a' + destinationFile), ('1' + destinationRank)); //Builds the move string
+        snprintf(moveNotation, 6, "%c%c%c%c", ('a' + originalFile), ('1' + originalRank), ('a' + destinationFile), ('1' + destinationRank)); //Builds the move string
     }
     return moveNotation; //Returns the move notation
 }

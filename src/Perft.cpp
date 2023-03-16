@@ -53,7 +53,7 @@ void perftTest(int depth, Board *position){ //Main perft tester
     return;
 }
 
-void parsePerft(Board *position, int depth){ //Automatically parse the file to test
+void parsePerft(int depth, Board *position){ //Automatically parse the file to test
     int positionNumber{1}; //Used to count how many position is checked
 
     std::ifstream file("./res/perft.txt"); //Gets the file

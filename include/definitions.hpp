@@ -96,7 +96,7 @@ extern void generateAllMoves(const Board *position,  MoveList *moveList); // Gen
 extern void printMoveList(const MoveList *moveList); //Prints out the move list
 extern void undoMove(Board *position); //To undo the move
 extern void perftTest(int depth, Board *position); //Main perft tester
-extern void parsePerft(Board *position, int depth); //Automatically parse the file to test
+extern void parsePerft(int depth, Board *position); //Automatically parse the file to test
 extern void searchPosition(Board *position); //Searches the position for moves
 
 extern int array120ToArray64[boardSquareNumber]; //To convert the 12x10 index to a 8x8 index (BAD PRACTICE TO DEFINE GLOBAL VARIABLES!!)
